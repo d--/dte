@@ -12,9 +12,11 @@ find_package(SDL2 REQUIRED)
 
 target_include_directories(tetris PUBLIC
     "${PROJECT_BINARY_DIR}"
+    "${PROJECT_SOURCE_DIR}/src/game"
     "${SDL2_INCLUDE_DIR}")
 
 target_link_libraries(tetris PUBLIC
+    game
     "${SDL2_LIBRARIES}")
 
 if (MSVC)
