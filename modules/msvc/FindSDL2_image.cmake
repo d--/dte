@@ -1,0 +1,13 @@
+set(SDL2_IMAGE_PATH "$ENV{SDL2_IMAGE_ROOT}"
+    CACHE PATH "Path to extracted SDL2_image")
+
+set(SDL2_IMAGE_ROOT_DIR "${SDL2_IMAGE_PATH}")
+set(SDL2_IMAGE_INCLUDE_DIR "${SDL2_IMAGE_PATH}/include")
+
+if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
+    set(SDL2_IMAGE_LIB_DIR "${SDL2_IMAGE_PATH}/lib/x64")
+else ()
+    set(SDL2_IMAGE_LIB_DIR "${SDL2_IMAGE_PATH}/lib/x86")
+endif ()
+
+set(SDL2_IMAGE_LIBRARY "${SDL2_IMAGE_LIB_DIR}/SDL2_image.lib")

@@ -1,4 +1,4 @@
-set(SDL2_PATH "$ENV{SDL2_ROOT}" CACHE PATH "Path to extracted SDL2-devel zip")
+set(SDL2_PATH "$ENV{SDL2_ROOT}" CACHE PATH "Path to extracted SDL2 zip")
 
 set(SDL2_ROOT_DIR "${SDL2_PATH}")
 set(SDL2_INCLUDE_DIR "${SDL2_PATH}/include")
