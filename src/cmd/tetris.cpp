@@ -1,32 +1,15 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <cstdlib>
-#include "game.h"
+#include <stack>
+#include "game/gamestates/gamestate.h"
+#include "game/gamestates/gameload.h"
+#include "game/asset_manager.h"
+
+using namespace dte;
 
 // todo: tune this
 #define FIXED_MS_UPDATE 16
-
-SDL_Texture* loadTexture(std::string path, SDL_Renderer *renderer) {
-    SDL_Texture* texture;
-
-    SDL_Surface* surface = IMG_Load(path.c_str());
-    if (surface == nullptr)
-    {
-        SDL_Log("Could not load image: %s\n", path.c_str());
-        SDL_Log("Error: %s\n", IMG_GetError());
-        return nullptr;
-    }
-
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if (texture == nullptr)
-    {
-        SDL_Log("Could not create texture: %s\n", path.c_str());
-        SDL_Log("Error: %s\n", SDL_GetError());
-    }
-
-    SDL_FreeSurface(surface);
-    return texture;
-}
 
 int main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -65,23 +48,13 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    SDL_Texture* texture;
-    std::string filename = "block.png";
-    texture = loadTexture(filename, renderer);
-    if (texture == nullptr) {
-        SDL_Log("Could not load image: %s\n", filename.c_str());
-        SDL_Log("Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Rect* src;
-    SDL_Rect dst;
-    src = nullptr;
-    dst.x = (400 - 256) / 2;
-    dst.y = (400 - 256) / 2;
-    dst.w = 256;
-    dst.h = 256;
-    SDL_SetTextureColorMod(texture, Uint8(0xFF), Uint8(0x00), Uint8(0xFF));
+    AssetManager assetManager(renderer);
+
+    std::stack<GameState *> gameStates = std::stack<GameState *>();
+    GameLoad loading = GameLoad(&assetManager);
+    gameStates.push(&loading);
+
+    assetManager.loadTextures();
 
     Uint32 currentTimeMs, elapsedTimeMs = 0;
     Uint32 previousTimeMs = SDL_GetTicks();
@@ -104,14 +77,15 @@ int main(int argc, char *argv[]) {
 
         // update
         while (poolTimeMs > FIXED_MS_UPDATE) {
-            // update()
+            gameStates.top()->update();
             poolTimeMs = poolTimeMs - FIXED_MS_UPDATE;
         }
 
         /// render
         // framesToInterpolate = poolTimeMs / FIXED_MS_UPDATE;
         SDL_RenderClear(renderer);
-        SDL_RenderCopy(renderer, texture, src, &dst);
+        // for each renderable, rendercopy
+        // SDL_RenderCopy(renderer, texture, src, &dst);
         SDL_RenderPresent(renderer);
     }
 

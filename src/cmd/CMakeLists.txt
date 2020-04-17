@@ -1,19 +1,8 @@
 add_executable(tetris tetris.cpp)
 
-if (MSVC)
-    set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules/msvc")
-endif ()
-
-if (APPLE)
-    set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules/apple")
-endif ()
-
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-
 target_include_directories(tetris PUBLIC
     "${PROJECT_BINARY_DIR}"
-    "${PROJECT_SOURCE_DIR}/src/game"
+    "${PROJECT_SOURCE_DIR}/src"
     "${SDL2_INCLUDE_DIR}"
     "${SDL2_IMAGE_INCLUDE_DIR}")
 
