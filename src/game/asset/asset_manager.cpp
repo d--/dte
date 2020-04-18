@@ -14,16 +14,17 @@ namespace dte {
         // the main thread (loading state?  something special?) via a queue to 
         // then be converted to SDL_Textures where the OpenGL context lives.
 
-        // I'll need to spin up an SDL_Thread, since std::thread isn't 
-        // available on MacOS and I should be doing something more platform 
-        // agnostic anyway.  (More platform agnostic than relying on the C++ 
-        // compiler... I guess...?)
+        SDL_Thread *loadThread;
+        loadThread = SDL_CreateThread(loadThreadFn,
+            "DTEImageLoadThread", (void *) this);
+        SDL_DetachThread(loadThread);
+    }
 
-        std::thread textureLoadThread = std::thread([=]() {
-            std::this_thread::sleep_for(std::chrono::seconds(5));
-            setLoadDone(true);
-        });
-        textureLoadThread.detach();
+    int AssetManager::loadThreadFn(void *ptr) {
+        AssetManager *manager = (AssetManager *) ptr;
+        SDL_Delay(5000);
+        manager->setLoadDone(true);
+        return 0;
     }
 
     bool AssetManager::isLoadDone() {

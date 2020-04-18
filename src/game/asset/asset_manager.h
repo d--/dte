@@ -12,11 +12,12 @@ namespace dte {
             ~AssetManager();
             void loadImages();
             bool isLoadDone();
-            void setLoadDone(bool done);
             std::string getError();
         private:
             SDL_Texture* loadImage(std::string path);
+            static int loadThreadFn(void *ptr);
             bool loadDone;
+            void setLoadDone(bool done);
             std::mutex loadDoneMutex;
             bool errorFlag;
             std::string error;
