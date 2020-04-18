@@ -1,4 +1,4 @@
-#include "gamestate.h"
+#include "game_state.h"
 #include <iostream>
 
 namespace dte {

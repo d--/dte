@@ -1,7 +1,7 @@
 add_library(game
     asset/asset_manager.cpp
-    gamestates/gamestate.cpp
-    gamestates/gameload.cpp)
+    gamestates/game_state.cpp
+    gamestates/game_load.cpp)
 
 target_include_directories(game PUBLIC
     "${SDL2_INCLUDE_DIR}"

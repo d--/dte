@@ -2,8 +2,8 @@
 #include <SDL_image.h>
 #include <cstdlib>
 #include <stack>
-#include "gamestates/gamestate.h"
-#include "gamestates/gameload.h"
+#include "gamestates/game_state.h"
+#include "gamestates/game_load.h"
 #include "asset/asset_manager.h"
 
 using namespace dte;

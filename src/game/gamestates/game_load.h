@@ -1,5 +1,5 @@
 #pragma once
-#include "gamestate.h"
+#include "game_state.h"
 #include "../asset/asset_manager.h"
 
 namespace dte {
