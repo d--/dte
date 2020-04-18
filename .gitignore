@@ -1,4 +1,5 @@
 *.swp
+.vs/
 .vscode/
 build/
 CMakeFiles/

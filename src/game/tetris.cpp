@@ -2,9 +2,9 @@
 #include <SDL_image.h>
 #include <cstdlib>
 #include <stack>
-#include "game/gamestates/gamestate.h"
-#include "game/gamestates/gameload.h"
-#include "game/asset_manager.h"
+#include "gamestates/gamestate.h"
+#include "gamestates/gameload.h"
+#include "asset/asset_manager.h"
 
 using namespace dte;
 
@@ -48,13 +48,13 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    AssetManager assetManager(renderer);
+    AssetManager assetManager;
 
-    std::stack<GameState *> gameStates = std::stack<GameState *>();
+    std::stack<GameState *> gameStates;
     GameLoad loading = GameLoad(&assetManager);
     gameStates.push(&loading);
 
-    assetManager.loadTextures();
+    assetManager.loadImages();
 
     Uint32 currentTimeMs, elapsedTimeMs = 0;
     Uint32 previousTimeMs = SDL_GetTicks();

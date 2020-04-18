@@ -1,6 +1,6 @@
 #pragma once
 #include "gamestate.h"
-#include "../asset_manager.h"
+#include "../asset/asset_manager.h"
 
 namespace dte {
     class GameLoad : public GameState {
