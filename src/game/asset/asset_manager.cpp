@@ -1,4 +1,3 @@
-#include <SDL.h>
 #include <SDL_image.h>
 #include "asset_manager.h"
 #include "assets.h"
@@ -8,6 +7,16 @@ namespace dte {
         loadDone(false),
         errorFlag(false),
         error("") {}
+
+    SDL_Surface * AssetManager::loadImage(std::string path) {
+        SDL_Surface *surface = IMG_Load(path.c_str());
+        if (surface == nullptr) {
+            SDL_Log("Could not load image: %s\n", path.c_str());
+            SDL_Log("Error: %s\n", IMG_GetError());
+            return nullptr;
+        }
+        return surface;
+    }
 
     void AssetManager::loadImages() {
         // So... this should load SDL_Surfaces which should be shuffled into   
@@ -40,8 +49,6 @@ namespace dte {
         loadDone = done;
         loadDoneMutex.unlock();
     }
-
-    AssetManager::~AssetManager() {}
 
     std::string AssetManager::getError() {
         return error;

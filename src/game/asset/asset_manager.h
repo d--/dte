@@ -1,20 +1,23 @@
 #pragma once
 
 #include <SDL.h>
+#include <deque>
 #include <vector>
 #include <mutex>
 #include <string>
+#include "texture_job.h"
 
 namespace dte {
     class AssetManager {
         public:
             AssetManager();
-            ~AssetManager();
             void loadImages();
             bool isLoadDone();
             std::string getError();
         private:
-            SDL_Texture* loadImage(std::string path);
+            std::deque<TextureJob> textureJobQueue;
+            std::mutex textureJobQueueMutex;
+            SDL_Surface * loadImage(std::string path);
             static int loadThreadFn(void *ptr);
             bool loadDone;
             void setLoadDone(bool done);

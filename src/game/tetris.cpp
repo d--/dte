@@ -2,9 +2,11 @@
 #include <SDL_image.h>
 #include <cstdlib>
 #include <stack>
+#include <deque>
 #include "gamestates/game_state.h"
 #include "gamestates/game_load.h"
 #include "asset/asset_manager.h"
+#include "asset/texture_job.h"
 
 using namespace dte;
 
