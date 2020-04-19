@@ -19,17 +19,13 @@ namespace dte {
     }
 
     void AssetManager::loadImages() {
-        // So... this should load SDL_Surfaces which should be shuffled into   
-        // the main thread (loading state?  something special?) via a queue to 
-        // then be converted to SDL_Textures where the OpenGL context lives.
-
         SDL_Thread *loadThread;
-        loadThread = SDL_CreateThread(loadThreadFn,
+        loadThread = SDL_CreateThread(loadImagesThreadFn,
             "DTEImageLoadThread", (void *) this);
         SDL_DetachThread(loadThread);
     }
 
-    int AssetManager::loadThreadFn(void *ptr) {
+    int AssetManager::loadImagesThreadFn(void *ptr) {
         AssetManager *manager = (AssetManager *) ptr;
         for (struct asset_image image : assetImages) {
             SDL_Surface *surface = loadImage(image.location);

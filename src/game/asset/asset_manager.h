@@ -20,7 +20,7 @@ namespace dte {
             std::deque<TextureJob> textureJobQueue;
             std::mutex textureJobQueueMutex;
             static SDL_Surface * loadImage(std::string path);
-            static int loadThreadFn(void *ptr);
+            static int loadImagesThreadFn(void *ptr);
             bool loadDone;
             void setLoadDone(bool done);
             std::mutex loadDoneMutex;
