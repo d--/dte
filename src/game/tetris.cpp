@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <stack>
 #include <deque>
+#include <unordered_map>
+#include <iostream>
 #include "gamestates/game_state.h"
 #include "gamestates/game_load.h"
 #include "asset/asset_manager.h"
@@ -57,6 +59,7 @@ int main(int argc, char *argv[]) {
     gameStates.push(&loading);
 
     assetManager.loadImages();
+    std::unordered_map<std::string, SDL_Texture *> textures;
 
     Uint32 currentTimeMs, elapsedTimeMs = 0;
     Uint32 previousTimeMs = SDL_GetTicks();
@@ -81,6 +84,14 @@ int main(int argc, char *argv[]) {
         while (poolTimeMs > FIXED_MS_UPDATE) {
             gameStates.top()->update();
             poolTimeMs = poolTimeMs - FIXED_MS_UPDATE;
+        }
+
+        // load new assets
+        while (assetManager.hasNewTextureJobs()) {
+            TextureJob job = assetManager.getNextTextureJob();
+            std::string id = job.getImageID();
+            SDL_Texture *texture = job.convertSurface(renderer);
+            textures.insert_or_assign(id, texture);
         }
 
         /// render

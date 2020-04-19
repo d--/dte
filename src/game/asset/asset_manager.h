@@ -14,10 +14,12 @@ namespace dte {
             void loadImages();
             bool isLoadDone();
             std::string getError();
+            bool hasNewTextureJobs();
+            TextureJob getNextTextureJob();
         private:
             std::deque<TextureJob> textureJobQueue;
             std::mutex textureJobQueueMutex;
-            SDL_Surface * loadImage(std::string path);
+            static SDL_Surface * loadImage(std::string path);
             static int loadThreadFn(void *ptr);
             bool loadDone;
             void setLoadDone(bool done);

@@ -31,6 +31,15 @@ namespace dte {
 
     int AssetManager::loadThreadFn(void *ptr) {
         AssetManager *manager = (AssetManager *) ptr;
+        for (struct asset_image image : assetImages) {
+            SDL_Surface *surface = loadImage(image.location);
+            TextureJob job(image.location, surface);
+            manager->textureJobQueueMutex.lock();
+            manager->textureJobQueue.push_back(job);
+            manager->textureJobQueueMutex.unlock();
+        }
+
+        // todo: remove this; just here for simulation
         SDL_Delay(5000);
         manager->setLoadDone(true);
         return 0;
@@ -52,5 +61,20 @@ namespace dte {
 
     std::string AssetManager::getError() {
         return error;
+    }
+
+    bool AssetManager::hasNewTextureJobs() {
+        textureJobQueueMutex.lock();
+        bool has = !(textureJobQueue.empty());
+        textureJobQueueMutex.unlock();
+        return has;
+    }
+
+    TextureJob AssetManager::getNextTextureJob() {
+        textureJobQueueMutex.lock();
+        TextureJob job = textureJobQueue.front();
+        textureJobQueue.pop_front();
+        textureJobQueueMutex.unlock();
+        return job;
     }
 }
