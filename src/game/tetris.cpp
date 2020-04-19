@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
             TextureJob job = assetManager.getNextTextureJob();
             std::string id = job.getImageID();
             SDL_Texture *texture = job.convertSurface(renderer);
-            textures.insert_or_assign(id, texture);
+            textures.insert(std::make_pair(id, texture));
         }
 
         /// render
