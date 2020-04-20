@@ -1,6 +1,7 @@
 add_library(game
     asset/asset_manager.cpp
     asset/texture_job.cpp
+    asset/texture_job_queue.cpp
     gamestates/game_state.cpp
     gamestates/game_load.cpp)
 

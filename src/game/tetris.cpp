@@ -68,6 +68,7 @@ int main(int argc, char *argv[]) {
 
     SDL_Event event;
     int quit = 0;
+    float angle = 0;
     while (!quit) {
         currentTimeMs = SDL_GetTicks();
         elapsedTimeMs = currentTimeMs - previousTimeMs;
@@ -108,12 +109,14 @@ int main(int argc, char *argv[]) {
         dest.y = (400 - 50) / 2;
 
         int i = 0;
+        angle = angle + 0.01f;
         for (struct asset_image image : assetImages) {
             if (textures.count(image.id) > 0) {
                 SDL_Texture *texture = textures.at(image.id);
                 SDL_SetTextureColorMod(texture,
                     Uint8(255 - i * 50), Uint8(i * 50), 0);
-                SDL_RenderCopy(renderer, texture, nullptr, &dest);
+                SDL_RenderCopyEx(renderer, texture, nullptr, &dest,
+                    angle + float(18 * i), nullptr, SDL_RendererFlip());
                 i++;
                 dest.x += 50;
             }
