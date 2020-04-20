@@ -9,6 +9,7 @@
 #include "gamestates/game_load.h"
 #include "asset/asset_manager.h"
 #include "asset/texture_job.h"
+#include "asset/assets.h"
 
 using namespace dte;
 
@@ -98,6 +99,26 @@ int main(int argc, char *argv[]) {
         // framesToInterpolate = poolTimeMs / FIXED_MS_UPDATE;
         SDL_RenderClear(renderer);
         // for each renderable, rendercopy
+
+        // todo: temporary, just to prove that the loader works
+        SDL_Rect dest;
+        dest.h = 50;
+        dest.w = dest.h;
+        dest.x = ((400 - 250) / 2);
+        dest.y = (400 - 50) / 2;
+
+        int i = 0;
+        for (struct asset_image image : assetImages) {
+            if (textures.count(image.id) > 0) {
+                SDL_Texture *texture = textures.at(image.id);
+                SDL_SetTextureColorMod(texture,
+                    Uint8(255 - i * 50), Uint8(i * 50), 0);
+                SDL_RenderCopy(renderer, texture, nullptr, &dest);
+                i++;
+                dest.x += 50;
+            }
+        }
+
         // SDL_RenderCopy(renderer, texture, src, &dst);
         SDL_RenderPresent(renderer);
     }
