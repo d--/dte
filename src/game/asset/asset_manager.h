@@ -4,6 +4,7 @@
 #include <deque>
 #include <vector>
 #include <mutex>
+#include <shared_mutex>
 #include <string>
 #include "texture_job.h"
 
@@ -18,12 +19,12 @@ namespace dte {
             TextureJob getNextTextureJob();
         private:
             std::deque<TextureJob> textureJobQueue;
-            std::mutex textureJobQueueMutex;
+            std::shared_timed_mutex textureJobQueueMutex;
             static SDL_Surface * loadImage(std::string path);
             static int loadImagesThreadFn(void *ptr);
             bool loadDone;
             void setLoadDone(bool done);
-            std::mutex loadDoneMutex;
+            std::shared_timed_mutex loadDoneMutex;
             bool errorFlag;
             std::string error;
     };

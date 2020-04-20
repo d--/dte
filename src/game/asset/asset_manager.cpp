@@ -42,17 +42,13 @@ namespace dte {
     }
 
     bool AssetManager::isLoadDone() {
-        bool done;
-        loadDoneMutex.lock();
-        done = loadDone;
-        loadDoneMutex.unlock();
-        return done;
+        std::shared_lock lock(loadDoneMutex);
+        return loadDone;
     }
 
     void AssetManager::setLoadDone(bool done) {
-        loadDoneMutex.lock();
+        std::unique_lock lock(loadDoneMutex);
         loadDone = done;
-        loadDoneMutex.unlock();
     }
 
     std::string AssetManager::getError() {
@@ -60,17 +56,14 @@ namespace dte {
     }
 
     bool AssetManager::hasNewTextureJobs() {
-        textureJobQueueMutex.lock();
-        bool has = !(textureJobQueue.empty());
-        textureJobQueueMutex.unlock();
-        return has;
+        std::shared_lock lock(textureJobQueueMutex);
+        return !(textureJobQueue.empty());
     }
 
     TextureJob AssetManager::getNextTextureJob() {
-        textureJobQueueMutex.lock();
+        std::unique_lock lock(textureJobQueueMutex);
         TextureJob job = textureJobQueue.front();
         textureJobQueue.pop_front();
-        textureJobQueueMutex.unlock();
         return job;
     }
 }
