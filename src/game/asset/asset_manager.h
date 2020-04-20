@@ -20,7 +20,8 @@ namespace dte {
         private:
             std::deque<TextureJob> textureJobQueue;
             std::shared_timed_mutex textureJobQueueMutex;
-            static SDL_Surface * loadImage(std::string path);
+            static void loadTextureJob(AssetManager *manager,
+                struct asset_image image);
             static int loadImagesThreadFn(void *ptr);
             bool loadDone;
             void setLoadDone(bool done);

@@ -7,6 +7,7 @@
 #include <iostream>
 #include "gamestates/game_state.h"
 #include "gamestates/game_load.h"
+#include "asset/assets.h"
 #include "asset/asset_manager.h"
 #include "asset/texture_job.h"
 
@@ -98,6 +99,12 @@ int main(int argc, char *argv[]) {
         // framesToInterpolate = poolTimeMs / FIXED_MS_UPDATE;
         SDL_RenderClear(renderer);
         // for each renderable, rendercopy
+        for (struct asset_image image : assetImages) {
+            if (textures.count(image.id) > 0) {
+                SDL_RenderCopy(renderer, textures.at(image.id),
+                    nullptr, nullptr);
+            }
+        }
         // SDL_RenderCopy(renderer, texture, src, &dst);
         SDL_RenderPresent(renderer);
     }
