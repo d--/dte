@@ -1,5 +1,5 @@
 1. Window drawing (x)
-2. Text and image drawing (1/2)
+2. Text and image drawing (x)
 3. Entity abstraction
 4. Game states
 5. Loading screen
