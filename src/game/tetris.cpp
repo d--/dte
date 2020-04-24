@@ -6,11 +6,12 @@
 #include <deque>
 #include <unordered_map>
 #include <iostream>
+#include "component/block_draw.h"
+#include "core/entity.h"
 #include "gamestates/game_state.h"
 #include "gamestates/game_load.h"
 #include "asset/assets.h"
 #include "asset/asset_manager.h"
-#include "asset/texture_job.h"
 
 using namespace dte;
 
@@ -73,33 +74,10 @@ int main(int argc, char *argv[]) {
     assetManager.loadImages();
     std::unordered_map<std::string, SDL_Texture *> textures;
 
-    TTF_Font *font = TTF_OpenFont("assets/Philosopher-Regular.ttf", 28);
-    if (font == nullptr) {
-        SDL_Log("Could not load font: %s\n", TTF_GetError());
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Surface *textSurface = TTF_RenderText_Blended(font,
-        "Successfully displaying text!",
-        SDL_Color{Uint8(0xFF), Uint8(0xFF), Uint8(0xFF), Uint8(0xFF)});
-    if (textSurface == nullptr) {
-        SDL_Log("Could not render text surface: %s\n", TTF_GetError());
-        SDL_Quit();
-        return 1;
-    }
-    SDL_Rect textDest{0, 0, textSurface->w, textSurface->h};
-    textDest.x = (400 - textDest.w) / 2;
-    textDest.y = (400 - textDest.h) / 2;
-
-    SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer,
-        textSurface);
-    if (textTexture == nullptr) {
-        SDL_Log("Could not convert text surface: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
-    SDL_FreeSurface(textSurface);
+    std::vector<Entity> entities;
+    BlockDrawComponent bdc;
+    Entity block(&bdc);
+    entities.push_back(block);
 
     Uint32 currentTimeMs, elapsedTimeMs = 0;
     Uint32 previousTimeMs = SDL_GetTicks();
@@ -122,7 +100,10 @@ int main(int argc, char *argv[]) {
 
         // update
         while (poolTimeMs > FIXED_MS_UPDATE) {
-            gameStates.top()->update();
+            for (Entity entity : entities) {
+                entity.update();
+            }
+
             poolTimeMs = poolTimeMs - FIXED_MS_UPDATE;
         }
 
@@ -134,17 +115,12 @@ int main(int argc, char *argv[]) {
             textures.insert(std::make_pair(id, texture));
         }
 
-        /// render
-        // framesToInterpolate = poolTimeMs / FIXED_MS_UPDATE;
+        // render
         SDL_RenderClear(renderer);
-        // for each renderable, rendercopy
-        for (struct asset_image image : assetImages) {
-            if (textures.count(image.id) > 0) {
-                SDL_RenderCopy(renderer, textures.at(image.id),
-                    nullptr, nullptr);
-            }
+        // framesToInterpolate = poolTimeMs / FIXED_MS_UPDATE;
+        for (Entity entity : entities) {
+            entity.draw(renderer);
         }
-        SDL_RenderCopy(renderer, textTexture, nullptr, &textDest);
         // SDL_RenderCopy(renderer, texture, src, &dst);
         SDL_RenderPresent(renderer);
     }

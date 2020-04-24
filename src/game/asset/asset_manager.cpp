@@ -1,6 +1,7 @@
 #include <SDL_image.h>
 #include "asset_manager.h"
 #include "assets.h"
+#include "../job/texture.h"
 
 namespace dte {
     AssetManager::AssetManager() :

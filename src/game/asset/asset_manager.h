@@ -6,7 +6,7 @@
 #include <mutex>
 #include <shared_mutex>
 #include <string>
-#include "texture_job.h"
+#include "../job/texture.h"
 
 namespace dte {
     class AssetManager {

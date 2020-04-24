@@ -1,4 +1,4 @@
-#include "texture_job.h"
+#include "texture.h"
 
 namespace dte {
     TextureJob::TextureJob(std::string id, SDL_Surface *surface) :

@@ -1,6 +1,6 @@
 1. Window drawing (x)
 2. Text and image drawing (x)
-3. Entity abstraction
+3. Entity abstraction ( ) <- WIP
 4. Game states
 5. Loading screen
 6. Menu screen

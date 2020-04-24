@@ -1,6 +1,8 @@
 #include "game_load.h"
 #include <iostream>
 
+#include "../asset/asset_manager.h"
+
 namespace dte {
     GameLoad::GameLoad(AssetManager *am) :
         assetManager(am) {}
