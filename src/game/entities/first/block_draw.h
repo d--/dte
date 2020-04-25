@@ -1,4 +1,4 @@
-#include "../component/draw.h"
+#include "../../component/draw.h"
 
 namespace dte {
     class BlockDrawComponent : public DrawComponent {

@@ -1,7 +1,9 @@
 add_library(game
     asset/asset_manager.cpp
+    entities/first/block_draw.cpp
+    entities/first/block_input.cpp
     component/draw.cpp
-    component/block_draw.cpp
+    component/input.cpp
     core/entity.cpp
     job/texture.cpp
     gamestates/game_state.cpp

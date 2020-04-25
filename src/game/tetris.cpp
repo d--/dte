@@ -6,7 +6,8 @@
 #include <deque>
 #include <unordered_map>
 #include <iostream>
-#include "component/block_draw.h"
+#include "entities/first/block_draw.h"
+#include "entities/first/block_input.h"
 #include "core/entity.h"
 #include "gamestates/game_state.h"
 #include "gamestates/game_load.h"
@@ -67,6 +68,7 @@ int main(int argc, char *argv[]) {
 
     AssetManager assetManager;
 
+    std::vector<Entity> entities;
     std::stack<GameState *> gameStates;
     GameLoad loading = GameLoad(&assetManager);
     gameStates.push(&loading);
@@ -74,9 +76,9 @@ int main(int argc, char *argv[]) {
     assetManager.loadImages();
     std::unordered_map<std::string, SDL_Texture *> textures;
 
-    std::vector<Entity> entities;
     BlockDrawComponent bdc;
-    Entity block(&bdc);
+    BlockInputComponent bic;
+    Entity block(&bic, &bdc);
     entities.push_back(block);
 
     Uint32 currentTimeMs, elapsedTimeMs = 0;
@@ -95,6 +97,10 @@ int main(int argc, char *argv[]) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = 1;
+                break;
+            }
+            for (Entity entity : entities) {
+                entity.input(event);
             }
         }
 
