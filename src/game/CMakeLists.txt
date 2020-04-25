@@ -1,13 +1,15 @@
 add_library(game
     asset/asset_manager.cpp
-    entities/first/block_draw.cpp
-    entities/first/block_input.cpp
-    component/draw.cpp
     component/input.cpp
+    component/transform.cpp
+    component/draw.cpp
     core/entity.cpp
-    job/texture.cpp
+    entities/first/block_input.cpp
+    entities/first/block_transform.cpp
+    entities/first/block_draw.cpp
     gamestates/game_state.cpp
-    gamestates/game_load.cpp)
+    gamestates/game_load.cpp
+    job/texture.cpp)
 
 target_include_directories(game PUBLIC
     "${SDL2_INCLUDE_DIR}"

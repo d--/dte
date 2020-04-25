@@ -9,7 +9,14 @@ namespace dte {
         errorFlag(false),
         error("") {}
 
-    void AssetManager::loadImages() {
+    void AssetManager::loadAllImages() {
+        for (struct asset_image image : assetImages) {
+            loadTextureJob(this, image);
+        }
+        loadDone = true;
+    }
+
+    void AssetManager::loadImagesAsync() {
         SDL_Thread *loadThread;
         loadThread = SDL_CreateThread(loadImagesThreadFn,
             "DTEImageLoadThread", (void *) this);

@@ -12,7 +12,10 @@ namespace dte {
     class AssetManager {
         public:
             AssetManager();
-            void loadImages();
+            // todo: temporary for entity component separation testing until it 
+            // makes sense to do things asynchronously
+            void loadAllImages();
+            void loadImagesAsync();
             bool isLoadDone();
             std::string getError();
             bool hasNewTextureJobs();

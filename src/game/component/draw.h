@@ -7,7 +7,10 @@ namespace dte {
     class Entity;
     class DrawComponent {
         public:
-            virtual void update(Entity &entity, SDL_Renderer *renderer);
+            virtual void update(Entity &entity,
+                SDL_Renderer *renderer,
+                Uint32 totalTimeMs,
+                float remainderFrames);
             virtual ~DrawComponent();
     };
 }

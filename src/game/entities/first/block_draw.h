@@ -1,8 +1,18 @@
+#pragma once
+
 #include "../../component/draw.h"
+#include "block_transform.h"
 
 namespace dte {
     class BlockDrawComponent : public DrawComponent {
         public:
-            void update(Entity &entity, SDL_Renderer *renderer);
+            BlockDrawComponent(BlockTransformComponent *btc, SDL_Texture *tex);
+            void update(Entity &entity, SDL_Renderer *renderer,
+                Uint32 totalTimeMs, float remainderFrames);
+        private:
+            BlockTransformComponent *blockTransformComponent;
+            SDL_Texture *texture;
+            SDL_Rect rect;
+            float x = 0, y = 0;
     };
 }

@@ -2,8 +2,10 @@
 
 namespace dte {
     Entity::Entity(InputComponent *ic,
+            TransformComponent *tc,
             DrawComponent *dc) :
         inputComponent(ic),
+        transformComponent(tc),
         drawComponent(dc) {}
 
     void Entity::input(SDL_Event event) {
@@ -11,10 +13,11 @@ namespace dte {
     }
 
     void Entity::update() {
-        // update more components here
+        transformComponent->update(*this);
     }
 
-    void Entity::draw(SDL_Renderer *renderer) {
-        drawComponent->update(*this, renderer);
+    void Entity::draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
+            float remainderFrames) {
+        drawComponent->update(*this, renderer, totalTimeMs, remainderFrames);
     }
 }

@@ -6,8 +6,9 @@
 #include <deque>
 #include <unordered_map>
 #include <iostream>
-#include "entities/first/block_draw.h"
 #include "entities/first/block_input.h"
+#include "entities/first/block_transform.h"
+#include "entities/first/block_draw.h"
 #include "core/entity.h"
 #include "gamestates/game_state.h"
 #include "gamestates/game_load.h"
@@ -51,7 +52,7 @@ int main(int argc, char *argv[]) {
     SDL_Window *window;
     window = SDL_CreateWindow("Tetris",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        400, 400, windowFlags);
+        800, 600, windowFlags);
     if (window == nullptr) {
         SDL_Log("Could not create window: %s\n", SDL_GetError());
         SDL_Quit();
@@ -70,20 +71,26 @@ int main(int argc, char *argv[]) {
 
     std::vector<Entity> entities;
     std::stack<GameState *> gameStates;
-    GameLoad loading = GameLoad(&assetManager);
-    gameStates.push(&loading);
 
-    assetManager.loadImages();
+    assetManager.loadAllImages();
     std::unordered_map<std::string, SDL_Texture *> textures;
+    while (assetManager.hasNewTextureJobs()) {
+        TextureJob job = assetManager.getNextTextureJob();
+        std::string id = job.getImageID();
+        SDL_Texture *texture = job.convertSurface(renderer);
+        textures.insert(std::make_pair(id, texture));
+    }
 
-    BlockDrawComponent bdc;
     BlockInputComponent bic;
-    Entity block(&bic, &bdc);
+    BlockTransformComponent btc(&bic);
+    BlockDrawComponent bdc(&btc, textures.at("blockA"));
+    Entity block(&bic, &btc, &bdc);
     entities.push_back(block);
 
     Uint32 currentTimeMs, elapsedTimeMs = 0;
     Uint32 previousTimeMs = SDL_GetTicks();
-    Uint32 poolTimeMs = 0;
+    Uint32 accumulatorMs = 0;
+    Uint32 totalTimeMs = 0;
 
     SDL_Event event;
     int quit = 0;
@@ -91,7 +98,8 @@ int main(int argc, char *argv[]) {
         currentTimeMs = SDL_GetTicks();
         elapsedTimeMs = currentTimeMs - previousTimeMs;
         previousTimeMs = currentTimeMs;
-        poolTimeMs = poolTimeMs + elapsedTimeMs;
+
+        accumulatorMs += elapsedTimeMs;
 
         // input
         while (SDL_PollEvent(&event)) {
@@ -105,12 +113,13 @@ int main(int argc, char *argv[]) {
         }
 
         // update
-        while (poolTimeMs > FIXED_MS_UPDATE) {
+        while (accumulatorMs >= FIXED_MS_UPDATE) {
             for (Entity entity : entities) {
                 entity.update();
             }
 
-            poolTimeMs = poolTimeMs - FIXED_MS_UPDATE;
+            accumulatorMs -= FIXED_MS_UPDATE;
+            totalTimeMs += FIXED_MS_UPDATE;
         }
 
         // load new assets
@@ -123,11 +132,10 @@ int main(int argc, char *argv[]) {
 
         // render
         SDL_RenderClear(renderer);
-        // framesToInterpolate = poolTimeMs / FIXED_MS_UPDATE;
+        float remainderFrames = float(accumulatorMs) / float(FIXED_MS_UPDATE);
         for (Entity entity : entities) {
-            entity.draw(renderer);
+            entity.draw(renderer, totalTimeMs, remainderFrames);
         }
-        // SDL_RenderCopy(renderer, texture, src, &dst);
         SDL_RenderPresent(renderer);
     }
 
