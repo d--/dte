@@ -24,10 +24,12 @@ namespace dte {
         int rotDelta = int(sin((time * (PI/2)) / 400.f) * 15.f);
         rect.w = 128 + scaleWDelta;
         rect.h = 128 + scaleHDelta;
+        float x = blockTransformComponent->getX();
+        float y = blockTransformComponent->getY();
         float xDelta = blockTransformComponent->getXDelta();
         float yDelta = blockTransformComponent->getYDelta();
-        rect.x = int(blockTransformComponent->getX() + (xDelta * remainderFrames)) - (scaleWDelta / 2);
-        rect.y = int(blockTransformComponent->getY() + (yDelta * remainderFrames)) - (scaleHDelta / 2);
+        rect.x = int(x + (xDelta * remainderFrames)) - (scaleWDelta / 2);
+        rect.y = int(y + (yDelta * remainderFrames)) - (scaleHDelta / 2);
         SDL_RenderCopyEx(renderer, texture, nullptr, &rect, rotDelta,
             nullptr, SDL_FLIP_NONE);
     }
