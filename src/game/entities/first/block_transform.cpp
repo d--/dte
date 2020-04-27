@@ -7,25 +7,39 @@ namespace dte {
 
     void BlockTransformComponent::update(Entity &entity) {
         unsigned int input = blockInputComponent->getBlockInputState();
+        xDelta = 0.f;
+        yDelta = 0.f;
         if ((input & BLOCK_INPUT_UP) != 0) {
-            y -= 3.f;
+            y -= 5.f;
+            yDelta = -5.f;
         }
         if ((input & BLOCK_INPUT_DOWN) != 0) {
-            y += 3.f;
+            y += 5.f;
+            yDelta = 5.f;
         }
         if ((input & BLOCK_INPUT_LEFT) != 0) {
-            x -= 3.f;
+            x -= 5.f;
+            xDelta = -5.f;
         }
         if ((input & BLOCK_INPUT_RIGHT) != 0) {
-            x += 3.f;
+            x += 5.f;
+            xDelta = 5.f;
         }
     }
 
-    float BlockTransformComponent::getX() {
+    float BlockTransformComponent::getX() const {
         return x;
     }
 
-    float BlockTransformComponent::getY() {
+    float BlockTransformComponent::getY() const {
         return y;
+    }
+
+    float BlockTransformComponent::getXDelta() const {
+        return xDelta;
+    }
+
+    float BlockTransformComponent::getYDelta() const {
+        return yDelta;
     }
 }

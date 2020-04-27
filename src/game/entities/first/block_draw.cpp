@@ -1,6 +1,5 @@
 #include "block_draw.h"
 #include <cmath>
-#include <iostream>
 
 namespace dte {
     const int FIXED_MS_UPDATE = 15;
@@ -17,7 +16,7 @@ namespace dte {
 
     void BlockDrawComponent::update(Entity &entity, SDL_Renderer *renderer, 
             Uint32 totalTimeMs, float remainderFrames) {
-        int time = totalTimeMs + int(FIXED_MS_UPDATE * remainderFrames);
+        float time = float(totalTimeMs) + (FIXED_MS_UPDATE * remainderFrames);
         float slow = 400.f;
         float scale = 20.f;
         int scaleWDelta = int(sin((time * (PI/2)) / slow) * scale);
@@ -25,8 +24,10 @@ namespace dte {
         int rotDelta = int(sin((time * (PI/2)) / 800.f) * 10.f);
         rect.w = 128 + scaleWDelta;
         rect.h = 128 + scaleHDelta;
-        rect.x = blockTransformComponent->getX();
-        rect.y = blockTransformComponent->getY();
+        float xDelta = blockTransformComponent->getXDelta();
+        float yDelta = blockTransformComponent->getYDelta();
+        rect.x = int(blockTransformComponent->getX() + (xDelta * remainderFrames));
+        rect.y = int(blockTransformComponent->getY() + (yDelta * remainderFrames));
         SDL_RenderCopyEx(renderer, texture, nullptr, &rect, rotDelta,
             nullptr, SDL_FLIP_NONE);
     }

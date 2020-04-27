@@ -11,8 +11,8 @@ namespace dte {
 
     class BlockInputComponent : public InputComponent {
         public:
-            void update(Entity &entity, SDL_Event event);
-            unsigned int getBlockInputState();
+            void update(Entity &entity, SDL_Event event) override;
+            unsigned int getBlockInputState() const;
         private:
             unsigned int inputState = 0;
     };

@@ -3,3 +3,5 @@
 .vscode/
 build/
 CMakeFiles/
+.idea/
+cmake-build-debug

@@ -12,6 +12,6 @@ namespace dte {
     };
 
     static std::vector<struct asset_image> assetImages{
-        { "blockA", "assets/block.png", 256, 256 }
+        { "blockA", "../assets/block.png", 256, 256 }
     };
 }

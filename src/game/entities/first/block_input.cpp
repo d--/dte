@@ -38,7 +38,7 @@ namespace dte {
         }
     }
 
-    unsigned int BlockInputComponent::getBlockInputState() {
+    unsigned int BlockInputComponent::getBlockInputState() const {
         return inputState;
     }
 }

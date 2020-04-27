@@ -16,6 +16,9 @@ if (APPLE)
     set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules/apple")
 endif ()
 
+set(DTE_ASSET_PATH "${CMAKE_SOURCE_DIR}/assets")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)

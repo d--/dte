@@ -45,3 +45,5 @@ if (MSVC)
         "${SDL2_TTF_LIB_DIR}/SDL2_ttf.dll"
         $<TARGET_FILE_DIR:tetris>)
 endif (MSVC)
+
+file(COPY "${DTE_ASSET_PATH}" DESTINATION "${CMAKE_BINARY_DIR}")
