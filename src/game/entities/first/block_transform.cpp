@@ -1,6 +1,9 @@
 #include "block_transform.h"
 
 namespace dte {
+    const float ROOT2 = 1.414213562f;
+    const float BLOCK_SPEED = 7.f;
+
     BlockTransformComponent::BlockTransformComponent(
             BlockInputComponent *bic) :
         blockInputComponent(bic) {};
@@ -10,21 +13,26 @@ namespace dte {
         xDelta = 0.f;
         yDelta = 0.f;
         if ((input & BLOCK_INPUT_UP) != 0) {
-            y -= 5.f;
-            yDelta += -5.f;
+            yDelta -= BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_DOWN) != 0) {
-            y += 5.f;
-            yDelta += 5.f;
+            yDelta += BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_LEFT) != 0) {
-            x -= 5.f;
-            xDelta += -5.f;
+            xDelta -= BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_RIGHT) != 0) {
-            x += 5.f;
-            xDelta += 5.f;
+            xDelta += BLOCK_SPEED;
         }
+        if ((input == (BLOCK_INPUT_UP | BLOCK_INPUT_RIGHT)) ||
+                (input == (BLOCK_INPUT_UP | BLOCK_INPUT_LEFT)) ||
+                (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_RIGHT)) ||
+                (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_LEFT))) {
+            yDelta = yDelta / ROOT2;
+            xDelta = xDelta / ROOT2;
+        }
+        x += xDelta;
+        y += yDelta;
     }
 
     float BlockTransformComponent::getX() const {
