@@ -1,7 +1,13 @@
 1. Window drawing (x)
 2. Text and image drawing (x)
-3. Entity abstraction ( ) <- WIP
-4. Game states
+3. Entity abstraction (x)
+4. Game states ( ) <- WIP
 5. Loading screen
 6. Menu screen
+7. Options screen
+8. Key mapping
+9. Aspect ratio and dynamic geometry
+10. Basic Tetris
+11. Sound playing
+12. Sound mixing options
 ...
