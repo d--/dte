@@ -38,7 +38,9 @@ namespace dte {
 
     void AssetManager::loadTextureJob(AssetManager *manager,
             struct asset_image image) {
-        SDL_Surface *surface = IMG_Load(image.location.c_str());
+        std::string basePath(SDL_GetBasePath());
+        std::string location(basePath + image.location);
+        SDL_Surface *surface = IMG_Load(location.c_str());
         if (surface == nullptr) {
             SDL_Log("Could not load image: %s\n", image.location.c_str());
             SDL_Log("Error: %s\n", IMG_GetError());
