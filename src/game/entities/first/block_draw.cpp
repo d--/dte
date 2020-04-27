@@ -17,11 +17,11 @@ namespace dte {
     void BlockDrawComponent::update(Entity &entity, SDL_Renderer *renderer, 
             Uint32 totalTimeMs, float remainderFrames) {
         float time = float(totalTimeMs) + (FIXED_MS_UPDATE * remainderFrames);
-        float slow = 200.f;
-        float scale = 20.f;
+        float slow = 250.f;
+        float scale = 50.f;
         int scaleWDelta = int(sin((time * (PI/2)) / slow) * scale);
-        int scaleHDelta = int(sin((time * (PI/2)) / 400.f) * 20.f);
-        int rotDelta = int(sin((time * (PI/2)) / 800.f) * 10.f);
+        int scaleHDelta = int(sin((time * (PI/2)) / 110.f) * 20.f);
+        int rotDelta = int(sin((time * (PI/2)) / 400.f) * 15.f);
         rect.w = 128 + scaleWDelta;
         rect.h = 128 + scaleHDelta;
         float xDelta = blockTransformComponent->getXDelta();
