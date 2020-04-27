@@ -8,6 +8,12 @@ namespace dte {
         transformComponent(tc),
         drawComponent(dc) {}
 
+    Entity::~Entity() {
+        delete inputComponent;
+        delete transformComponent;
+        delete drawComponent;
+    }
+
     void Entity::input(SDL_Event event) {
         inputComponent->update(*this, event);
     }

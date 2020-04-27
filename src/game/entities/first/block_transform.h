@@ -6,7 +6,7 @@
 namespace dte {
     class BlockTransformComponent : public TransformComponent {
         public:
-            BlockTransformComponent(BlockInputComponent *bic);
+            explicit BlockTransformComponent(BlockInputComponent *bic);
             void update(Entity &entity) override;
             float getX() const;
             float getY() const;

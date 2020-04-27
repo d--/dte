@@ -1,17 +1,28 @@
 #include "game_load.h"
-#include <iostream>
-
-#include "../asset/asset_manager.h"
 
 namespace dte {
-    GameLoad::GameLoad(AssetManager *am) :
+    GameLoad::GameLoad(StateManager *sm, AssetManager *am) :
+        stateManager(sm),
         assetManager(am) {}
 
+    void GameLoad::enter() {
+
+    }
+
+    void GameLoad::input(SDL_Event event) {
+
+    }
+
     void GameLoad::update() {
-        if (assetManager->isLoadDone()) {
-            std::cout << "load is done" << std::endl;
-        } else {
-            std::cout << "loading..." << std::endl;
-        }
+
+    }
+
+    void GameLoad::draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
+                        float remainderFrames) {
+
+    }
+
+    void GameLoad::exit() {
+
     }
 }

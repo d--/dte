@@ -2,23 +2,16 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cstdlib>
-#include <stack>
 #include <deque>
 #include <unordered_map>
-#include <iostream>
-#include "entities/first/block_input.h"
-#include "entities/first/block_transform.h"
-#include "entities/first/block_draw.h"
+#include "core/constants.h"
 #include "core/entity.h"
-#include "gamestates/game_state.h"
-#include "gamestates/game_load.h"
+#include "gamestates/state_manager.h"
+#include "gamestates/sandbox_state.h"
 #include "asset/assets.h"
 #include "asset/asset_manager.h"
 
 using namespace dte;
-
-// todo: tune this
-#define FIXED_MS_UPDATE 16
 
 int main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -28,9 +21,8 @@ int main(int argc, char *argv[]) {
     }
     atexit(SDL_Quit);
 
-    int imgflags = IMG_INIT_PNG;
-    int loaded;
-    loaded = IMG_Init(imgflags);
+    unsigned int imgflags = IMG_INIT_PNG;
+    unsigned int loaded = IMG_Init(int(imgflags));
     if ((loaded & imgflags) != imgflags) {
         SDL_Log("Could not init SDL_image: %s\n", IMG_GetError());
         SDL_Quit();
@@ -69,9 +61,6 @@ int main(int argc, char *argv[]) {
 
     AssetManager assetManager;
 
-    std::vector<Entity> entities;
-    std::stack<GameState *> gameStates;
-
     assetManager.loadAllImages();
     std::unordered_map<std::string, SDL_Texture *> textures;
     while (assetManager.hasNewTextureJobs()) {
@@ -81,11 +70,11 @@ int main(int argc, char *argv[]) {
         textures.insert(std::make_pair(id, texture));
     }
 
-    BlockInputComponent bic;
-    BlockTransformComponent btc(&bic);
-    BlockDrawComponent bdc(&btc, textures.at("blockA"));
-    Entity block(&bic, &btc, &bdc);
-    entities.push_back(block);
+    StateManager stateManager;
+
+    // todo: need a better way to pass resources around
+    SandboxState sandboxState(textures);
+    stateManager.push(&sandboxState);
 
     Uint32 currentTimeMs, elapsedTimeMs = 0;
     Uint32 previousTimeMs = SDL_GetTicks();
@@ -107,17 +96,12 @@ int main(int argc, char *argv[]) {
                 quit = 1;
                 break;
             }
-            for (Entity entity : entities) {
-                entity.input(event);
-            }
+            stateManager.input(event);
         }
 
         // update
         while (accumulatorMs >= FIXED_MS_UPDATE) {
-            for (Entity entity : entities) {
-                entity.update();
-            }
-
+            stateManager.update();
             accumulatorMs -= FIXED_MS_UPDATE;
             totalTimeMs += FIXED_MS_UPDATE;
         }
@@ -133,9 +117,7 @@ int main(int argc, char *argv[]) {
         // render
         SDL_RenderClear(renderer);
         float remainderFrames = float(accumulatorMs) / float(FIXED_MS_UPDATE);
-        for (Entity entity : entities) {
-            entity.draw(renderer, totalTimeMs, remainderFrames);
-        }
+        stateManager.draw(renderer, totalTimeMs, remainderFrames);
         SDL_RenderPresent(renderer);
     }
 

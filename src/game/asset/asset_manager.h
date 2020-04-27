@@ -24,7 +24,7 @@ namespace dte {
             std::deque<TextureJob> textureJobQueue;
             std::shared_timed_mutex textureJobQueueMutex;
             static void loadTextureJob(AssetManager *manager,
-                struct asset_image image);
+                const struct asset_image& image);
             static int loadImagesThreadFn(void *ptr);
             bool loadDone;
             void setLoadDone(bool done);

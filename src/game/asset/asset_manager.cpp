@@ -1,7 +1,6 @@
 #include <SDL_image.h>
 #include "asset_manager.h"
 #include "assets.h"
-#include "../job/texture.h"
 
 namespace dte {
     AssetManager::AssetManager() :
@@ -10,7 +9,7 @@ namespace dte {
         error("") {}
 
     void AssetManager::loadAllImages() {
-        for (struct asset_image image : assetImages) {
+        for (const struct asset_image& image : assetImages) {
             loadTextureJob(this, image);
         }
         loadDone = true;
@@ -24,8 +23,8 @@ namespace dte {
     }
 
     int AssetManager::loadImagesThreadFn(void *ptr) {
-        AssetManager *manager = (AssetManager *) ptr;
-        for (struct asset_image image : assetImages) {
+        auto *manager = (AssetManager *) ptr;
+        for (const struct asset_image& image : assetImages) {
             // todo: remove this; just here for simulation
             SDL_Delay(1000);
 
@@ -37,7 +36,7 @@ namespace dte {
     }
 
     void AssetManager::loadTextureJob(AssetManager *manager,
-            struct asset_image image) {
+            const struct asset_image& image) {
         std::string basePath(SDL_GetBasePath());
         std::string location(basePath + image.location);
         SDL_Surface *surface = IMG_Load(location.c_str());

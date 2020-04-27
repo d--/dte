@@ -1,7 +1,7 @@
 #include "block_transform.h"
+#include "../../core/constants.h"
 
 namespace dte {
-    const float ROOT2 = 1.414213562f;
     const float BLOCK_SPEED = 7.f;
 
     BlockTransformComponent::BlockTransformComponent(
@@ -28,8 +28,8 @@ namespace dte {
                 (input == (BLOCK_INPUT_UP | BLOCK_INPUT_LEFT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_RIGHT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_LEFT))) {
-            yDelta = yDelta / ROOT2;
-            xDelta = xDelta / ROOT2;
+            yDelta = yDelta / SQRT2;
+            xDelta = xDelta / SQRT2;
         }
         x += xDelta;
         y += yDelta;

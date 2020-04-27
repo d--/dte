@@ -1,10 +1,8 @@
 #include "block_draw.h"
+#include "../../core/constants.h"
 #include <cmath>
 
 namespace dte {
-    const int FIXED_MS_UPDATE = 15;
-    const float PI = 3.1415926535f;
-
     BlockDrawComponent::BlockDrawComponent(BlockTransformComponent *btc,
             SDL_Texture *tex) :
         blockTransformComponent(btc),
@@ -14,7 +12,7 @@ namespace dte {
             128, 128
         }) {}
 
-    void BlockDrawComponent::update(Entity &entity, SDL_Renderer *renderer, 
+    void BlockDrawComponent::update(Entity &entity, SDL_Renderer *renderer,
             Uint32 totalTimeMs, float remainderFrames) {
         float time = float(totalTimeMs) + (FIXED_MS_UPDATE * remainderFrames);
         float slowFactor = 250.f;

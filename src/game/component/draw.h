@@ -10,7 +10,7 @@ namespace dte {
             virtual void update(Entity &entity,
                 SDL_Renderer *renderer,
                 Uint32 totalTimeMs,
-                float remainderFrames);
-            virtual ~DrawComponent();
+                float remainderFrames) = 0;
+            virtual ~DrawComponent() = default;
     };
 }

@@ -1,13 +1,15 @@
 #pragma once
 
+#include <vector>
 #include "game_state.h"
+#include "../core/entity.h"
 #include "../asset/asset_manager.h"
-#include "state_manager.h"
 
 namespace dte {
-    class GameLoad : public GameState {
+    class SandboxState : public GameState {
     public:
-        GameLoad(StateManager *sm, AssetManager *am);
+        explicit SandboxState(
+                std::unordered_map<std::string, SDL_Texture *> textures);
         void enter() override;
         void input(SDL_Event event) override;
         void update() override;
@@ -15,7 +17,6 @@ namespace dte {
                   float remainderFrames) override;
         void exit() override;
     private:
-        AssetManager *assetManager;
-        StateManager *stateManager;
+        std::vector<Entity *> entities;
     };
 }

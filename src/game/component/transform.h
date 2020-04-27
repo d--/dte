@@ -6,7 +6,7 @@ namespace dte {
     class Entity;
     class TransformComponent {
         public:
-            virtual void update(Entity &entity);
-            virtual ~TransformComponent();
+            virtual void update(Entity &entity) = 0;
+            virtual ~TransformComponent() = default;
     };
 }

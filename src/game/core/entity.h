@@ -14,6 +14,7 @@ namespace dte {
             Entity(InputComponent *inputComponent,
                 TransformComponent *transformComponent,
                 DrawComponent *drawComponent);
+            ~Entity();
             void input(SDL_Event event);
             void update();
             void draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
