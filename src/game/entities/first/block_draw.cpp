@@ -17,17 +17,19 @@ namespace dte {
     void BlockDrawComponent::update(Entity &entity, SDL_Renderer *renderer, 
             Uint32 totalTimeMs, float remainderFrames) {
         float time = float(totalTimeMs) + (FIXED_MS_UPDATE * remainderFrames);
-        float slow = 200.f;
-        float scale = 20.f;
+        float slow = 250.f;
+        float scale = 50.f;
         int scaleWDelta = int(sin((time * (PI/2)) / slow) * scale);
-        int scaleHDelta = int(sin((time * (PI/2)) / 400.f) * 20.f);
-        int rotDelta = int(sin((time * (PI/2)) / 800.f) * 10.f);
+        int scaleHDelta = int(sin((time * (PI/2)) / 110.f) * 20.f);
+        int rotDelta = int(sin((time * (PI/2)) / 400.f) * 15.f);
         rect.w = 128 + scaleWDelta;
         rect.h = 128 + scaleHDelta;
+        float x = blockTransformComponent->getX();
+        float y = blockTransformComponent->getY();
         float xDelta = blockTransformComponent->getXDelta();
         float yDelta = blockTransformComponent->getYDelta();
-        rect.x = int(blockTransformComponent->getX() + (xDelta * remainderFrames)) - (scaleWDelta / 2);
-        rect.y = int(blockTransformComponent->getY() + (yDelta * remainderFrames)) - (scaleHDelta / 2);
+        rect.x = int(x + (xDelta * remainderFrames)) - (scaleWDelta / 2);
+        rect.y = int(y + (yDelta * remainderFrames)) - (scaleHDelta / 2);
         SDL_RenderCopyEx(renderer, texture, nullptr, &rect, rotDelta,
             nullptr, SDL_FLIP_NONE);
     }
