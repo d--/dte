@@ -11,19 +11,19 @@ namespace dte {
         yDelta = 0.f;
         if ((input & BLOCK_INPUT_UP) != 0) {
             y -= 5.f;
-            yDelta = -5.f;
+            yDelta += -5.f;
         }
         if ((input & BLOCK_INPUT_DOWN) != 0) {
             y += 5.f;
-            yDelta = 5.f;
+            yDelta += 5.f;
         }
         if ((input & BLOCK_INPUT_LEFT) != 0) {
             x -= 5.f;
-            xDelta = -5.f;
+            xDelta += -5.f;
         }
         if ((input & BLOCK_INPUT_RIGHT) != 0) {
             x += 5.f;
-            xDelta = 5.f;
+            xDelta += 5.f;
         }
     }
 
