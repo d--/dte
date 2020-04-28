@@ -1,5 +1,4 @@
 #include <SDL_image.h>
-#include <iostream>
 #include "asset_manager.h"
 
 namespace dte {

@@ -1,5 +1,4 @@
 #include <unordered_map>
-#include <iostream>
 #include "sandbox_state.h"
 #include "../entities/first/block_input.h"
 #include "../entities/first/block_transform.h"

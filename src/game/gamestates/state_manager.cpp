@@ -1,4 +1,3 @@
-#include <iostream>
 #include "state_manager.h"
 
 namespace dte {
