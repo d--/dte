@@ -1,8 +1,10 @@
 #include "texture.h"
 
+#include <utility>
+
 namespace dte {
     TextureJob::TextureJob(std::string id, SDL_Surface *surface) :
-        imageId(id),
+        imageId(std::move(id)),
         sdlSurface(surface) {}
 
     std::string TextureJob::getImageID() {

@@ -1,79 +1,97 @@
 #include <SDL_image.h>
+#include <iostream>
 #include "asset_manager.h"
-#include "assets.h"
 
 namespace dte {
-    AssetManager::AssetManager() :
-        loadDone(false),
-        errorFlag(false),
-        error("") {}
-
-    void AssetManager::loadAllImages() {
-        for (const struct asset_image& image : assetImages) {
-            loadTextureJob(this, image);
-        }
-        loadDone = true;
+    AssetManager::AssetManager() : quit(false) {
+        workThread = SDL_CreateThread(workThreadFn,
+                "DTEImageLoadThread", (void *) this);
     }
 
-    void AssetManager::loadImagesAsync() {
-        SDL_Thread *loadThread;
-        loadThread = SDL_CreateThread(loadImagesThreadFn,
-            "DTEImageLoadThread", (void *) this);
-        SDL_DetachThread(loadThread);
+    AssetManager::~AssetManager() {
+        quit = true;
+        int threadReturn = 0;
+        SDL_WaitThread(workThread, &threadReturn);
+        if (threadReturn < 0) {
+            SDL_Log("Asset manager shutdown failed: %s", SDL_GetError());
+        }
     }
 
-    int AssetManager::loadImagesThreadFn(void *ptr) {
-        auto *manager = (AssetManager *) ptr;
-        for (const struct asset_image& image : assetImages) {
-            // todo: remove this; just here for simulation
-            SDL_Delay(1000);
+    bool AssetManager::isQuit() const {
+        return quit;
+    }
 
-            loadTextureJob(manager, image);
+    int AssetManager::workThreadFn(void *ptr) {
+        auto manager = (AssetManager *) ptr;
+
+        int variableDelay = 2;
+        int delayMax = 500;
+        while (!manager->isQuit()) {
+            if (manager->hasJobs()) {
+                AssetJob *job = manager->getNextJob();
+                job->execute(manager);
+                delete job;
+                variableDelay = 2;
+            } else {
+                SDL_Delay(variableDelay);
+                if (variableDelay < delayMax) {
+                    variableDelay *= 2;
+                }
+            }
         }
-
-        manager->setLoadDone(true);
         return 0;
     }
 
-    void AssetManager::loadTextureJob(AssetManager *manager,
-            const struct asset_image& image) {
-        std::string basePath(SDL_GetBasePath());
-        std::string location(basePath + image.location);
-        SDL_Surface *surface = IMG_Load(location.c_str());
-        if (surface == nullptr) {
-            SDL_Log("Could not load image: %s\n", image.location.c_str());
-            SDL_Log("Error: %s\n", IMG_GetError());
-            return;
+    // main thread only
+    void AssetManager::pumpTextures(SDL_Renderer *renderer) {
+        while (hasTextureJobs()) {
+            TextureJob *job = getNextTextureJob();
+            SDL_Texture *texture = job->convertSurface(renderer);
+            std::string id = job->getImageID();
+            delete job;
+            textures.insert(std::make_pair(id, texture));
         }
-
-        TextureJob job(image.id, surface);
-        std::unique_lock lock(manager->textureJobQueueMutex);
-        manager->textureJobQueue.push_back(job);
     }
 
-    bool AssetManager::isLoadDone() {
-        std::shared_lock lock(loadDoneMutex);
-        return loadDone;
+    void AssetManager::enqueueJob(TextureJob *job) {
+        std::unique_lock lock(textureJobQueueMutex);
+        textureJobQueue.push_back(job);
     }
 
-    void AssetManager::setLoadDone(bool done) {
-        std::unique_lock lock(loadDoneMutex);
-        loadDone = done;
+    void AssetManager::enqueueJob(AssetJob *job) {
+        std::unique_lock lock(jobQueueMutex);
+        jobQueue.push_back(job);
     }
 
-    std::string AssetManager::getError() {
-        return error;
+    bool AssetManager::hasJobs() {
+        std::shared_lock lock(jobQueueMutex);
+        return !(jobQueue.empty());
     }
 
-    bool AssetManager::hasNewTextureJobs() {
+    AssetJob *AssetManager::getNextJob() {
+        std::unique_lock lock(jobQueueMutex);
+        AssetJob *job = jobQueue.front();
+        jobQueue.pop_front();
+        return job;
+    }
+
+    bool AssetManager::hasTextureJobs() {
         std::shared_lock lock(textureJobQueueMutex);
         return !(textureJobQueue.empty());
     }
 
-    TextureJob AssetManager::getNextTextureJob() {
+    TextureJob *AssetManager::getNextTextureJob() {
         std::unique_lock lock(textureJobQueueMutex);
-        TextureJob job = textureJobQueue.front();
+        TextureJob *job = textureJobQueue.front();
         textureJobQueue.pop_front();
         return job;
+    }
+
+    bool AssetManager::jobQueuesEmpty() {
+        return !(hasJobs() || hasTextureJobs());
+    }
+
+    SDL_Texture *AssetManager::getTexture(const std::string& id) {
+        return textures.at(id);
     }
 }

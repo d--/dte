@@ -7,10 +7,11 @@ add_library(game
         entities/first/block_input.cpp
         entities/first/block_transform.cpp
         entities/first/block_draw.cpp
-        gamestates/game_load.cpp
         gamestates/state_manager.cpp
         gamestates/sandbox_state.cpp
-        job/texture.cpp)
+        job/texture.cpp
+        job/asset_job.h
+        job/image_load_job.cpp)
 
 target_include_directories(game PUBLIC
         "${SDL2_INCLUDE_DIR}"

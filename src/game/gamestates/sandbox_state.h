@@ -8,15 +8,23 @@
 namespace dte {
     class SandboxState : public GameState {
     public:
-        explicit SandboxState(
-                std::unordered_map<std::string, SDL_Texture *> textures);
+        enum LoadingState {
+            LOAD_BEGIN,
+            LOAD_IN_PROGRESS,
+            LOAD_COMPLETE
+        };
+
+        void load(AssetManager *assetManager) override;
+        bool isLoading() override;
         void enter() override;
         void input(SDL_Event event) override;
         void update() override;
         void draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
                   float remainderFrames) override;
+        bool isQuit() override;
         void exit() override;
     private:
+        LoadingState loadingState = LOAD_BEGIN;
         std::vector<Entity *> entities;
     };
 }

@@ -1,30 +1,31 @@
 #include <unordered_map>
+#include <iostream>
 #include "sandbox_state.h"
 #include "../entities/first/block_input.h"
 #include "../entities/first/block_transform.h"
 #include "../entities/first/block_draw.h"
 
 namespace dte {
-    SandboxState::SandboxState(
-            std::unordered_map<std::string, SDL_Texture *> textures) {
-        auto *bic = new BlockInputComponent();
-        auto *btc = new BlockTransformComponent(bic);
-        auto *bdc = new BlockDrawComponent(btc, textures.at("blockA"));
-        auto *block = new Entity(bic, btc, bdc);
-        entities.push_back(block);
-    }
+    void SandboxState::load(AssetManager *assetManager) {
+        if (loadingState == LOAD_BEGIN) {
+            assetManager->enqueueJob(new ImageLoadJob(
+                    "blockA", "../assets/block.png"));
+            loadingState = LOAD_IN_PROGRESS;
+        }
 
-    void SandboxState::enter() {
+        if (assetManager->jobQueuesEmpty()) {
+            auto blockTex = assetManager->getTexture("blockA");
+            auto blockInput = new BlockInputComponent();
+            auto blockTransform = new BlockTransformComponent(blockInput);
+            auto blockDraw = new BlockDrawComponent(blockTransform, blockTex);
+            auto block = new Entity(blockInput, blockTransform, blockDraw);
+            entities.push_back(block);
 
-    }
-
-    void SandboxState::update() {
-        for (Entity *entity : entities) {
-            entity->update();
+            loadingState = LOAD_COMPLETE;
         }
     }
 
-    void SandboxState::exit() {
+    void SandboxState::enter() {
 
     }
 
@@ -34,10 +35,28 @@ namespace dte {
         }
     }
 
+    void SandboxState::update() {
+        for (Entity *entity : entities) {
+            entity->update();
+        }
+    }
+
     void SandboxState::draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
                             float remainderFrames) {
         for (Entity *entity : entities) {
             entity->draw(renderer, totalTimeMs, remainderFrames);
         }
+    }
+
+    bool SandboxState::isQuit() {
+        return false;
+    }
+
+    void SandboxState::exit() {
+
+    }
+
+    bool SandboxState::isLoading() {
+        return loadingState == LOAD_BEGIN || loadingState == LOAD_IN_PROGRESS;
     }
 }

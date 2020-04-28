@@ -2,13 +2,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cstdlib>
-#include <deque>
-#include <unordered_map>
 #include "core/constants.h"
 #include "core/entity.h"
 #include "gamestates/state_manager.h"
 #include "gamestates/sandbox_state.h"
-#include "asset/assets.h"
 #include "asset/asset_manager.h"
 
 using namespace dte;
@@ -60,29 +57,18 @@ int main(int argc, char *argv[]) {
     }
 
     AssetManager assetManager;
+    StateManager stateManager(&assetManager);
 
-    assetManager.loadAllImages();
-    std::unordered_map<std::string, SDL_Texture *> textures;
-    while (assetManager.hasNewTextureJobs()) {
-        TextureJob job = assetManager.getNextTextureJob();
-        std::string id = job.getImageID();
-        SDL_Texture *texture = job.convertSurface(renderer);
-        textures.insert(std::make_pair(id, texture));
-    }
-
-    StateManager stateManager;
-
-    // todo: need a better way to pass resources around
-    SandboxState sandboxState(textures);
+    SandboxState sandboxState;
     stateManager.push(&sandboxState);
 
-    Uint32 currentTimeMs, elapsedTimeMs = 0;
+    Uint32 currentTimeMs, elapsedTimeMs;
     Uint32 previousTimeMs = SDL_GetTicks();
     Uint32 accumulatorMs = 0;
     Uint32 totalTimeMs = 0;
 
     SDL_Event event;
-    int quit = 0;
+    bool quit = false;
     while (!quit) {
         currentTimeMs = SDL_GetTicks();
         elapsedTimeMs = currentTimeMs - previousTimeMs;
@@ -93,7 +79,7 @@ int main(int argc, char *argv[]) {
         // input
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
-                quit = 1;
+                quit = true;
                 break;
             }
             stateManager.input(event);
@@ -106,13 +92,8 @@ int main(int argc, char *argv[]) {
             totalTimeMs += FIXED_MS_UPDATE;
         }
 
-        // load new assets
-        while (assetManager.hasNewTextureJobs()) {
-            TextureJob job = assetManager.getNextTextureJob();
-            std::string id = job.getImageID();
-            SDL_Texture *texture = job.convertSurface(renderer);
-            textures.insert(std::make_pair(id, texture));
-        }
+        // load new textures
+        assetManager.pumpTextures(renderer);
 
         // render
         SDL_RenderClear(renderer);

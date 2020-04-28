@@ -6,30 +6,38 @@
 #include <mutex>
 #include <shared_mutex>
 #include <string>
+#include <unordered_map>
+#include "../job/asset_job.h"
 #include "../job/texture.h"
+#include "../job/image_load_job.h"
 
 namespace dte {
+    class AssetJob;
     class AssetManager {
         public:
             AssetManager();
-            // todo: temporary for entity component separation testing until it 
-            // makes sense to do things asynchronously
-            void loadAllImages();
-            void loadImagesAsync();
-            bool isLoadDone();
-            std::string getError();
-            bool hasNewTextureJobs();
-            TextureJob getNextTextureJob();
+            ~AssetManager();
+            bool isQuit() const;
+            void pumpTextures(SDL_Renderer *renderer);
+            void enqueueJob(TextureJob *job);
+            void enqueueJob(AssetJob *job);
+            bool jobQueuesEmpty();
+
+            SDL_Texture *getTexture(const std::string& id);
         private:
-            std::deque<TextureJob> textureJobQueue;
+            SDL_Thread *workThread;
+            static int workThreadFn(void *ptr);
+            bool quit;
+
+            std::deque<AssetJob *> jobQueue;
+            std::shared_timed_mutex jobQueueMutex;
+            std::deque<TextureJob *> textureJobQueue;
             std::shared_timed_mutex textureJobQueueMutex;
-            static void loadTextureJob(AssetManager *manager,
-                const struct asset_image& image);
-            static int loadImagesThreadFn(void *ptr);
-            bool loadDone;
-            void setLoadDone(bool done);
-            std::shared_timed_mutex loadDoneMutex;
-            bool errorFlag;
-            std::string error;
+            bool hasJobs();
+            bool hasTextureJobs();
+            AssetJob *getNextJob();
+            TextureJob *getNextTextureJob();
+
+            std::unordered_map<std::string, SDL_Texture *> textures;
     };
 }
