@@ -9,6 +9,7 @@ namespace dte {
     class SandboxState : public GameState {
     public:
         enum LoadingState {
+            LOAD_ENQUEUE,
             LOAD_BEGIN,
             LOAD_IN_PROGRESS,
             LOAD_COMPLETE
@@ -24,7 +25,7 @@ namespace dte {
         bool isQuit() override;
         void exit() override;
     private:
-        LoadingState loadingState = LOAD_BEGIN;
+        LoadingState loadingState = LOAD_ENQUEUE;
         std::vector<Entity *> entities;
     };
 }

@@ -86,11 +86,11 @@ namespace dte {
         return job;
     }
 
-    bool AssetManager::jobQueuesEmpty() {
-        return !(hasJobs() || hasTextureJobs());
-    }
-
     SDL_Texture *AssetManager::getTexture(const std::string& id) {
         return textures.at(id);
+    }
+
+    bool AssetManager::hasTexture(const std::string& id) {
+        return textures.count(id);
     }
 }

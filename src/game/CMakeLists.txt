@@ -11,7 +11,8 @@ add_library(game
         gamestates/sandbox_state.cpp
         job/texture.cpp
         job/asset_job.h
-        job/image_load_job.cpp)
+        job/image_load_job.cpp
+        job/text_load_job.cpp)
 
 target_include_directories(game PUBLIC
         "${SDL2_INCLUDE_DIR}"

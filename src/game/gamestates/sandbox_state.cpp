@@ -3,24 +3,52 @@
 #include "../entities/first/block_input.h"
 #include "../entities/first/block_transform.h"
 #include "../entities/first/block_draw.h"
+#include "../job/text_load_job.h"
+#include "../job/image_load_job.h"
 
 namespace dte {
     void SandboxState::load(AssetManager *assetManager) {
-        if (loadingState == LOAD_BEGIN) {
-            assetManager->enqueueJob(new ImageLoadJob(
-                    "blockA", "../assets/block.png"));
-            loadingState = LOAD_IN_PROGRESS;
+        if (loadingState == LOAD_ENQUEUE) {
+            assetManager->enqueueJob(new TextLoadJob("loadingText",
+                    "Philosopher-Regular.ttf",
+                    "LOADING", 72, 0xFF, 0xFF, 0xFF, 0xFF));
+            assetManager->enqueueJob(new ImageLoadJob("blockA", "block.png"));
+            loadingState = LOAD_BEGIN;
+            return;
         }
 
-        if (assetManager->jobQueuesEmpty()) {
-            auto blockTex = assetManager->getTexture("blockA");
-            auto blockInput = new BlockInputComponent();
-            auto blockTransform = new BlockTransformComponent(blockInput);
-            auto blockDraw = new BlockDrawComponent(blockTransform, blockTex);
-            auto block = new Entity(blockInput, blockTransform, blockDraw);
-            entities.push_back(block);
+        if (loadingState == LOAD_BEGIN &&
+            assetManager->hasTexture("loadingText")) {
+            auto loaderTex = assetManager->getTexture("loadingText");
+            auto loaderInput = new BlockInputComponent();
+            auto loaderTransform = new BlockTransformComponent(loaderInput);
+            auto loaderDraw = new BlockDrawComponent(loaderTransform, loaderTex);
+            auto loader = new Entity(loaderInput, loaderTransform, loaderDraw);
+            entities.push_back(loader);
+            loadingState = LOAD_IN_PROGRESS;
+            return;
+        }
 
-            loadingState = LOAD_COMPLETE;
+        if (loadingState == LOAD_IN_PROGRESS) {
+            for (Entity *entity : entities) {
+                entity->update();
+            }
+
+            if (assetManager->hasTexture("blockA")) {
+                for (unsigned int i = 0; i < entities.size(); i++) {
+                    entities.pop_back();
+                }
+
+                auto blockTex = assetManager->getTexture("blockA");
+                auto blockInput = new BlockInputComponent();
+                auto blockTransform = new BlockTransformComponent(blockInput);
+                auto blockDraw = new BlockDrawComponent(blockTransform, blockTex);
+                auto block = new Entity(blockInput, blockTransform, blockDraw);
+                entities.push_back(block);
+
+                loadingState = LOAD_COMPLETE;
+                return;
+            }
         }
     }
 
@@ -56,6 +84,6 @@ namespace dte {
     }
 
     bool SandboxState::isLoading() {
-        return loadingState == LOAD_BEGIN || loadingState == LOAD_IN_PROGRESS;
+        return loadingState != LOAD_COMPLETE;
     }
 }
