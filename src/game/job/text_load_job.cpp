@@ -25,7 +25,7 @@ namespace dte {
         if (textSurface == nullptr) {
             SDL_Log("Could not render text surface: %s\n", TTF_GetError());
         }
-        manager->enqueueJob(new TextureJob(id, textSurface));
+        manager->submitTextureJob(new TextureJob(id, textSurface));
     }
 }
 

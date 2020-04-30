@@ -8,35 +8,37 @@
 #include <string>
 #include <unordered_map>
 #include "../job/asset_job.h"
-#include "../job/texture.h"
+#include "../job/texture_job.h"
+#include "../job/asset_job_batch.h"
+#include "texture_store.h"
 
 namespace dte {
     class AssetJob;
+    class AssetJobBatch;
     class AssetManager {
     public:
         AssetManager();
         ~AssetManager();
         bool isQuit() const;
         void pumpTextures(SDL_Renderer *renderer);
-        void enqueueJob(TextureJob *job);
-        void enqueueJob(AssetJob *job);
-
+        void processBatch(AssetJobBatch *batch);
         SDL_Texture *getTexture(const std::string& id);
-        bool hasTexture(const std::string &id);
+        void submitTextureJob(TextureJob *job);
     private:
         SDL_Thread *workThread;
         static int workThreadFn(void *ptr);
         bool quit;
 
-        std::deque<AssetJob *> jobQueue;
-        std::shared_timed_mutex jobQueueMutex;
+        std::deque<AssetJobBatch *> batchQueue;
+        std::shared_timed_mutex batchQueueMutex;
+        bool hasBatches();
+        AssetJobBatch *getNextBatch();
+
         std::deque<TextureJob *> textureJobQueue;
         std::shared_timed_mutex textureJobQueueMutex;
-        bool hasJobs();
         bool hasTextureJobs();
-        AssetJob *getNextJob();
         TextureJob *getNextTextureJob();
 
-        std::unordered_map<std::string, SDL_Texture *> textures;
+        TextureStore textureStore;
     };
 }

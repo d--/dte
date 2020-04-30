@@ -20,6 +20,16 @@ namespace dte {
             return;
         }
 
-        manager->enqueueJob(new TextureJob(imageId, surface));
+        auto *textureJob = new TextureJob(imageId, surface);
+        manager->submitTextureJob(textureJob);
+
+        Uint32 variableDelay = 2;
+        Uint32 delayMax = 200;
+        while (!textureJob->isFinished()) {
+            SDL_Delay(variableDelay);
+            if (variableDelay < delayMax) {
+                variableDelay *= 2;
+            }
+        }
     }
 }

@@ -25,6 +25,8 @@ namespace dte {
         bool isQuit() override;
         void exit() override;
     private:
+        AssetJobBatch loadingJobBatch;
+        AssetJobBatch assetJobBatch;
         LoadingState loadingState = LOAD_ENQUEUE;
         std::vector<Entity *> entities;
     };

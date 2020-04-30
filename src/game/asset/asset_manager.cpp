@@ -22,14 +22,12 @@ namespace dte {
 
     int AssetManager::workThreadFn(void *ptr) {
         auto manager = (AssetManager *) ptr;
-
         int variableDelay = 2;
         int delayMax = 500;
         while (!manager->isQuit()) {
-            if (manager->hasJobs()) {
-                AssetJob *job = manager->getNextJob();
-                job->execute(manager);
-                delete job;
+            if (manager->hasBatches()) {
+                AssetJobBatch *batch = manager->getNextBatch();
+                batch->execute(manager);
                 variableDelay = 2;
             } else {
                 SDL_Delay(variableDelay);
@@ -44,34 +42,20 @@ namespace dte {
     // main thread only
     void AssetManager::pumpTextures(SDL_Renderer *renderer) {
         while (hasTextureJobs()) {
-            TextureJob *job = getNextTextureJob();
-            SDL_Texture *texture = job->convertSurface(renderer);
-            std::string id = job->getImageID();
-            delete job;
-            textures.insert(std::make_pair(id, texture));
+            getNextTextureJob()->execute(renderer, textureStore);
         }
     }
 
-    void AssetManager::enqueueJob(TextureJob *job) {
-        std::unique_lock lock(textureJobQueueMutex);
-        textureJobQueue.push_back(job);
+    bool AssetManager::hasBatches() {
+        std::shared_lock lock(batchQueueMutex);
+        return !(batchQueue.empty());
     }
 
-    void AssetManager::enqueueJob(AssetJob *job) {
-        std::unique_lock lock(jobQueueMutex);
-        jobQueue.push_back(job);
-    }
-
-    bool AssetManager::hasJobs() {
-        std::shared_lock lock(jobQueueMutex);
-        return !(jobQueue.empty());
-    }
-
-    AssetJob *AssetManager::getNextJob() {
-        std::unique_lock lock(jobQueueMutex);
-        AssetJob *job = jobQueue.front();
-        jobQueue.pop_front();
-        return job;
+    AssetJobBatch *AssetManager::getNextBatch() {
+        std::unique_lock lock(batchQueueMutex);
+        AssetJobBatch *batch = batchQueue.front();
+        batchQueue.pop_front();
+        return batch;
     }
 
     bool AssetManager::hasTextureJobs() {
@@ -87,10 +71,16 @@ namespace dte {
     }
 
     SDL_Texture *AssetManager::getTexture(const std::string& id) {
-        return textures.at(id);
+        return textureStore.getTexture(id);
     }
 
-    bool AssetManager::hasTexture(const std::string& id) {
-        return textures.count(id);
+    void AssetManager::submitTextureJob(TextureJob *job) {
+        std::unique_lock lock(textureJobQueueMutex);
+        textureJobQueue.push_back(job);
+    }
+
+    void AssetManager::processBatch(AssetJobBatch *batch) {
+        std::unique_lock lock(batchQueueMutex);
+        batchQueue.push_back(batch);
     }
 }

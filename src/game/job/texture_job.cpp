@@ -1,4 +1,4 @@
-#include "texture.h"
+#include "texture_job.h"
 
 #include <utility>
 
@@ -7,11 +7,7 @@ namespace dte {
         imageId(std::move(id)),
         sdlSurface(surface) {}
 
-    std::string TextureJob::getImageID() {
-        return imageId;
-    }
-
-    SDL_Texture * TextureJob::convertSurface(SDL_Renderer *renderer) {
+    void TextureJob::execute(SDL_Renderer *renderer, TextureStore &store) {
         SDL_Texture* texture;
         texture = SDL_CreateTextureFromSurface(renderer, sdlSurface);
         if (texture == nullptr) {
@@ -20,6 +16,14 @@ namespace dte {
         }
 
         SDL_FreeSurface(sdlSurface);
-        return texture;
+        store.insert(imageId, texture);
+
+        std::unique_lock lock(finishedMutex);
+        finished = true;
+    }
+
+    bool TextureJob::isFinished() {
+        std::shared_lock lock(finishedMutex);
+        return finished;
     }
 }

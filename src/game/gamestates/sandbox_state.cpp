@@ -9,22 +9,24 @@
 namespace dte {
     void SandboxState::load(AssetManager *assetManager) {
         if (loadingState == LOAD_ENQUEUE) {
-            assetManager->enqueueJob(new TextLoadJob("loadingText",
-                    "Philosopher-Regular.ttf",
-                    "LOADING", 72, 0xFF, 0xFF, 0xFF, 0xFF));
-            assetManager->enqueueJob(new ImageLoadJob("blockA", "block.png"));
+            loadingJobBatch.add(new TextLoadJob("loadingText",
+                                      "Philosopher-Regular.ttf",
+                                      "LOADING", 72, 0xFF, 0xFF, 0xFF, 0xFF));
+            assetManager->processBatch(&loadingJobBatch);
             loadingState = LOAD_BEGIN;
             return;
         }
 
-        if (loadingState == LOAD_BEGIN &&
-            assetManager->hasTexture("loadingText")) {
+        if (loadingState == LOAD_BEGIN && loadingJobBatch.isFinished()) {
             auto loaderTex = assetManager->getTexture("loadingText");
             auto loaderInput = new BlockInputComponent();
             auto loaderTransform = new BlockTransformComponent(loaderInput);
             auto loaderDraw = new BlockDrawComponent(loaderTransform, loaderTex);
             auto loader = new Entity(loaderInput, loaderTransform, loaderDraw);
             entities.push_back(loader);
+
+            assetJobBatch.add(new ImageLoadJob("blockA", "block.png"));
+            assetManager->processBatch(&assetJobBatch);
             loadingState = LOAD_IN_PROGRESS;
             return;
         }
@@ -34,7 +36,7 @@ namespace dte {
                 entity->update();
             }
 
-            if (assetManager->hasTexture("blockA")) {
+            if (assetJobBatch.isFinished()) {
                 for (unsigned int i = 0; i < entities.size(); i++) {
                     entities.pop_back();
                 }
