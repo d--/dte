@@ -8,16 +8,16 @@
 
 namespace dte {
     void SandboxState::load(AssetManager *assetManager) {
-        if (loadingState == LOAD_ENQUEUE) {
+        if (loadingState == LOAD_BEGIN) {
             loadingJobBatch.add(new TextLoadJob("loadingText",
                                       "Philosopher-Regular.ttf",
                                       "LOADING", 72, 0xFF, 0xFF, 0xFF, 0xFF));
             assetManager->processBatch(&loadingJobBatch);
-            loadingState = LOAD_BEGIN;
+            loadingState = LOAD_SHOW;
             return;
         }
 
-        if (loadingState == LOAD_BEGIN && loadingJobBatch.isFinished()) {
+        if (loadingState == LOAD_SHOW && loadingJobBatch.isFinished()) {
             auto loaderTex = assetManager->getTexture("loadingText");
             auto loaderInput = new BlockInputComponent();
             auto loaderTransform = new BlockTransformComponent(loaderInput);

@@ -10,29 +10,29 @@ namespace dte {
 
     void BlockTransformComponent::update(Entity &entity) {
         unsigned int input = blockInputComponent->getBlockInputState();
-        xDelta = 0.f;
-        yDelta = 0.f;
+        dx = 0.f;
+        dy = 0.f;
         if ((input & BLOCK_INPUT_UP) != 0) {
-            yDelta -= BLOCK_SPEED;
+            dy -= BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_DOWN) != 0) {
-            yDelta += BLOCK_SPEED;
+            dy += BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_LEFT) != 0) {
-            xDelta -= BLOCK_SPEED;
+            dx -= BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_RIGHT) != 0) {
-            xDelta += BLOCK_SPEED;
+            dx += BLOCK_SPEED;
         }
         if ((input == (BLOCK_INPUT_UP | BLOCK_INPUT_RIGHT)) ||
                 (input == (BLOCK_INPUT_UP | BLOCK_INPUT_LEFT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_RIGHT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_LEFT))) {
-            yDelta = yDelta / SQRT2;
-            xDelta = xDelta / SQRT2;
+            dy = dy / SQRT2;
+            dx = dx / SQRT2;
         }
-        x += xDelta;
-        y += yDelta;
+        x += dx;
+        y += dy;
     }
 
     float BlockTransformComponent::getX() const {
@@ -44,10 +44,10 @@ namespace dte {
     }
 
     float BlockTransformComponent::getXDelta() const {
-        return xDelta;
+        return dx;
     }
 
     float BlockTransformComponent::getYDelta() const {
-        return yDelta;
+        return dy;
     }
 }

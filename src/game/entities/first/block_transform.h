@@ -16,7 +16,7 @@ namespace dte {
             BlockInputComponent *blockInputComponent;
             float x = 0;
             float y = 0;
-            float xDelta = 0;
-            float yDelta = 0;
+            float dx = 0;
+            float dy = 0;
     };
 }

@@ -9,8 +9,8 @@ namespace dte {
     class SandboxState : public GameState {
     public:
         enum LoadingState {
-            LOAD_ENQUEUE,
             LOAD_BEGIN,
+            LOAD_SHOW,
             LOAD_IN_PROGRESS,
             LOAD_COMPLETE
         };
@@ -27,7 +27,7 @@ namespace dte {
     private:
         AssetJobBatch loadingJobBatch;
         AssetJobBatch assetJobBatch;
-        LoadingState loadingState = LOAD_ENQUEUE;
+        LoadingState loadingState = LOAD_BEGIN;
         std::vector<Entity *> entities;
     };
 }
