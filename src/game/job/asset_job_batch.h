@@ -3,8 +3,8 @@
 #include "asset_job.h"
 
 namespace dte {
-    class AssetManager;
     class AssetJob;
+    class AssetManager;
     class AssetJobBatch {
     public:
         void add(AssetJob *job);

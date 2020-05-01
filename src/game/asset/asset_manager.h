@@ -23,7 +23,8 @@ namespace dte {
         void pumpTextures(SDL_Renderer *renderer);
         void processBatch(AssetJobBatch *batch);
         SDL_Texture *getTexture(const std::string& id);
-        void submitTextureJob(TextureJob *job);
+        void executeTextureJobAsync(TextureJob *job);
+        void executeTextureJob(TextureJob *job);
     private:
         SDL_Thread *workThread;
         static int workThreadFn(void *ptr);

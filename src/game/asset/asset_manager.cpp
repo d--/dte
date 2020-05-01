@@ -74,9 +74,21 @@ namespace dte {
         return textureStore.getTexture(id);
     }
 
-    void AssetManager::submitTextureJob(TextureJob *job) {
+    void AssetManager::executeTextureJobAsync(TextureJob *job) {
         std::unique_lock lock(textureJobQueueMutex);
         textureJobQueue.push_back(job);
+    }
+
+    void AssetManager::executeTextureJob(TextureJob *job) {
+        this->executeTextureJobAsync(job);
+        Uint32 variableDelay = 2;
+        Uint32 delayMax = 200;
+        while (!job->isFinished()) {
+            SDL_Delay(variableDelay);
+            if (variableDelay < delayMax) {
+                variableDelay *= 2;
+            }
+        }
     }
 
     void AssetManager::processBatch(AssetJobBatch *batch) {
