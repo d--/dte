@@ -15,6 +15,7 @@ namespace dte {
         std::shared_lock ajLock(assetJobsMutex);
         for (AssetJob *job : assetJobs) {
             job->execute(manager);
+            delete job;
         }
 
         std::unique_lock fLock(finishedMutex);

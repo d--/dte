@@ -58,7 +58,9 @@ namespace dte {
     }
 
     void SandboxState::exit() {
-
+        for (Entity *entity : entities) {
+            delete entity;
+        }
     }
 
     bool SandboxState::isLoading() {

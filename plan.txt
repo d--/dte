@@ -3,8 +3,7 @@
 3. Entity abstraction (x)
 4. Game states (x)
 5. Loading screen (x)
-x. Stop and look for memory leaks
-6. Menu screen
+6. Menu screen ( ) <- WIP
 7. Options screen
 8. Key mapping
 9. Aspect ratio and dynamic geometry
