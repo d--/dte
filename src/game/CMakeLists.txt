@@ -1,5 +1,6 @@
 add_library(game
         asset/asset_manager.cpp
+        asset/texture_store.cpp
         component/draw.h
         component/input.h
         component/transform.h
@@ -7,14 +8,14 @@ add_library(game
         entities/first/block_input.cpp
         entities/first/block_transform.cpp
         entities/first/block_draw.cpp
-        gamestates/state_manager.cpp
+        gamestates/generic_loading.cpp
         gamestates/sandbox_state.cpp
-        job/texture_job.cpp
+        gamestates/state_manager.cpp
         job/asset_job.h
+        job/asset_job_batch.cpp
         job/image_load_job.cpp
         job/text_load_job.cpp
-        job/asset_job_batch.cpp
-        asset/texture_store.cpp)
+        job/texture_job.cpp)
 
 target_include_directories(game PUBLIC
         "${SDL2_INCLUDE_DIR}"
