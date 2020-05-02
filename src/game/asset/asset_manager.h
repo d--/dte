@@ -18,17 +18,17 @@ namespace dte {
     class AssetManager {
     public:
         AssetManager();
-        ~AssetManager();
-        bool isQuit() const;
+        void shutdown();
         void pumpTextures(SDL_Renderer *renderer);
         void processBatch(AssetJobBatch *batch);
         SDL_Texture *getTexture(const std::string& id);
         void executeTextureJobAsync(TextureJob *job);
         void executeTextureJob(TextureJob *job);
     private:
-        SDL_Thread *workThread;
         static int workThreadFn(void *ptr);
         bool quit;
+        std::shared_timed_mutex quitMutex;
+        bool isQuit();
 
         std::deque<AssetJobBatch *> batchQueue;
         std::shared_timed_mutex batchQueueMutex;

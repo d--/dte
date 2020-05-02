@@ -80,7 +80,6 @@ int main(int argc, char *argv[]) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = true;
-                break;
             }
             stateManager.input(event);
         }
@@ -104,6 +103,7 @@ int main(int argc, char *argv[]) {
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    assetManager.shutdown();
 
     return 0;
 }

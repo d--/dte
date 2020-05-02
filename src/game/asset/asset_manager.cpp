@@ -2,21 +2,17 @@
 #include "asset_manager.h"
 
 namespace dte {
-    AssetManager::AssetManager() : quit(false) {
-        workThread = SDL_CreateThread(workThreadFn,
-                "DTEImageLoadThread", (void *) this);
+    AssetManager::AssetManager() {
+        SDL_CreateThread(workThreadFn, "DTEAssetWork", (void *) this);
     }
 
-    AssetManager::~AssetManager() {
+    void AssetManager::shutdown() {
+        std::unique_lock lock(quitMutex);
         quit = true;
-        int threadReturn = 0;
-        SDL_WaitThread(workThread, &threadReturn);
-        if (threadReturn < 0) {
-            SDL_Log("Asset manager shutdown failed: %s", SDL_GetError());
-        }
     }
 
-    bool AssetManager::isQuit() const {
+    bool AssetManager::isQuit() {
+        std::shared_lock lock(quitMutex);
         return quit;
     }
 
