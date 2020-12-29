@@ -3,6 +3,7 @@
 
 namespace dte {
     AssetManager::AssetManager() {
+        this->quit = false;
         SDL_CreateThread(workThreadFn, "DTEAssetWork", (void *) this);
     }
 
