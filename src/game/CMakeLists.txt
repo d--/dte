@@ -18,7 +18,6 @@ add_library(game
         job/texture_job.cpp)
 
 target_include_directories(game PUBLIC
-        "${SDL2_INCLUDE_DIR}"
         "${SDL2_IMAGE_INCLUDE_DIR}"
         "${SDL2_TTF_INCLUDE_DIR}")
 
@@ -27,13 +26,12 @@ add_executable(tetris tetris.cpp)
 target_include_directories(tetris PUBLIC
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}/src"
-        "${SDL2_INCLUDE_DIR}"
         "${SDL2_IMAGE_INCLUDE_DIR}"
         "${SDL2_TTF_INCLUDE_DIR}")
 
 target_link_libraries(tetris PUBLIC
         game
-        "${SDL2_LIBRARIES}"
+        "${SDL2_LIBRARY}"
         "${SDL2_IMAGE_LIBRARY}"
         "${SDL2_TTF_LIBRARY}")
 

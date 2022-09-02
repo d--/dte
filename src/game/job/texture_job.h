@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <string>
 #include <shared_mutex>
 #include "../asset/texture_store.h"

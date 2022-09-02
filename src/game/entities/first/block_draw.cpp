@@ -15,11 +15,12 @@ namespace dte {
     void BlockDrawComponent::update(Entity &entity, SDL_Renderer *renderer,
             Uint32 totalTimeMs, float remainderFrames) {
         float time = float(totalTimeMs) + (FIXED_MS_UPDATE * remainderFrames);
-        float slowFactor = 250.f;
+
+        float slowFactor = 1000.f; // ms per cycle
         float scale = 50.f;
-        float scaleWDelta = sin((time * (PI / 2.f)) / slowFactor) * scale;
-        float scaleHDelta = sin((time * (PI / 2.f)) / 110.f) * 20.f;
-        float rotDelta = sin((time * (PI / 2.f)) / 400.f) * 15.f;
+        float scaleWDelta = sin((time * (PI * 2.f)) / slowFactor) * scale;
+        float scaleHDelta = sin((time * (PI * 2.f)) / (slowFactor * 0.44f)) * 20.f;
+        float rotDelta = sin((time * (PI * 2.f)) / (slowFactor * 1.2f)) * 15.f;
 
         float x = blockTransformComponent->getX();
         float y = blockTransformComponent->getY();

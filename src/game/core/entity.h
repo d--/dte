@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "../component/input.h"
 #include "../component/transform.h"
 #include "../component/draw.h"

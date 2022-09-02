@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <string>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 namespace dte {
     class TextureStore {

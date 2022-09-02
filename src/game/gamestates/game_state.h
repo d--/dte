@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "../asset/asset_manager.h"
 
 namespace dte {
