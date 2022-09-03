@@ -6,7 +6,7 @@
 
 namespace dte {
     void GenericLoadingMachine::load(AssetManager *assetManager,
-            AssetJobBatch &batch, std::vector<Entity *> &entities) {
+            AssetJobBatch *batch, std::vector<Entity *> *entities) {
         if (loadingState == LOAD_BEGIN) {
             loadingJobBatch.add(new TextLoadJob("loadingText",
                                         "Philosopher-Regular.ttf",
@@ -17,7 +17,7 @@ namespace dte {
         }
 
         if (loadingState == LOAD_SHOW && loadingJobBatch.isFinished()) {
-            assetManager->processBatch(&batch);
+            assetManager->processBatch(batch);
 
             auto loaderTex = assetManager->getTexture("loadingText");
             auto loaderInput = new BlockInputComponent();
@@ -25,18 +25,18 @@ namespace dte {
             auto loaderDraw = new BlockDrawComponent(loaderTransform,
                     loaderTex);
             auto loader = new Entity(loaderInput, loaderTransform, loaderDraw);
-            entities.push_back(loader);
+            entities->push_back(loader);
             loadingState = LOAD_IN_PROGRESS;
             return;
         }
 
         if (loadingState == LOAD_IN_PROGRESS) {
-            for (Entity *entity : entities) {
+            for (Entity *entity : *entities) {
                 entity->update();
             }
 
-            if (batch.isFinished()) {
-                entities.clear();
+            if (batch->isFinished()) {
+                entities->clear();
                 loadingState = LOAD_COMPLETE;
                 return;
             }

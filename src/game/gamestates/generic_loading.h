@@ -13,8 +13,8 @@ namespace dte {
             LOAD_COMPLETE
         };
 
-        void load(AssetManager *assetManager, AssetJobBatch &batch,
-                  std::vector<Entity *> &entities);
+        void load(AssetManager *assetManager, AssetJobBatch *batch,
+                  std::vector<Entity *> *entities);
         bool isDone() const;
     private:
         AssetJobBatch loadingJobBatch;

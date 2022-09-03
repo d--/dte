@@ -39,7 +39,7 @@ namespace dte {
     // main thread only
     void AssetManager::pumpTextures(SDL_Renderer *renderer) {
         while (hasTextureJobs()) {
-            getNextTextureJob()->execute(renderer, textureStore);
+            getNextTextureJob()->execute(renderer, &textureStore);
         }
     }
 

@@ -9,7 +9,7 @@ namespace dte {
     class TextureJob {
         public:
             TextureJob(std::string id, SDL_Surface *surface);
-            void execute(SDL_Renderer *renderer, TextureStore &store);
+            void execute(SDL_Renderer *renderer, TextureStore *store);
             bool isFinished();
         private:
             std::string imageId;

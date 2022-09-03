@@ -13,7 +13,7 @@ namespace dte {
         }
 
         if (loadingState == LOAD_IN_PROGRESS) {
-            loadingMachine.load(assetManager, assetJobBatch, entities);
+            loadingMachine.load(assetManager, &assetJobBatch, &entities);
             if (loadingMachine.isDone()) {
                 loadingState = LOAD_COMPLETE;
             }

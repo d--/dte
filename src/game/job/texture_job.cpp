@@ -7,7 +7,7 @@ namespace dte {
         imageId(std::move(id)),
         sdlSurface(surface) {}
 
-    void TextureJob::execute(SDL_Renderer *renderer, TextureStore &store) {
+    void TextureJob::execute(SDL_Renderer *renderer, TextureStore *store) {
         SDL_Texture* texture;
         texture = SDL_CreateTextureFromSurface(renderer, sdlSurface);
         if (texture == nullptr) {
@@ -16,7 +16,7 @@ namespace dte {
         }
 
         SDL_FreeSurface(sdlSurface);
-        store.insert(imageId, texture);
+        store->insert(imageId, texture);
 
         std::unique_lock lock(finishedMutex);
         finished = true;
