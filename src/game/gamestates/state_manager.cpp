@@ -1,8 +1,10 @@
 #include "state_manager.h"
 
 namespace dte {
-    StateManager::StateManager(AssetManager *assetManager) :
-        assetManager(assetManager) {}
+    StateManager::StateManager(AssetManager *assetManager,
+                               DisplayManager *displayManager) :
+        assetManager(assetManager),
+        displayManager(displayManager) {}
 
     void StateManager::push(GameState *state) {
         states.push_back(state);
@@ -35,8 +37,7 @@ namespace dte {
         states.back()->update();
     }
 
-    void StateManager::draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
-                            float remainderFrames) {
-        states.back()->draw(renderer, totalTimeMs, remainderFrames);
+    void StateManager::draw(Uint32 totalTimeMs, float remainderFrames) {
+        states.back()->draw(displayManager, totalTimeMs, remainderFrames);
     }
 }

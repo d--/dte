@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include "../asset/asset_manager.h"
+#include "../manager/display_manager.h"
 
 namespace dte {
     class GameState {
@@ -11,7 +12,8 @@ namespace dte {
         virtual void enter() = 0;
         virtual void input(SDL_Event event) = 0;
         virtual void update() = 0;
-        virtual void draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
+        virtual void draw(DisplayManager *dm,
+                          Uint32 totalTimeMs,
                           float remainderFrames) = 0;
         virtual bool isQuit() = 0;
         virtual void exit() = 0;

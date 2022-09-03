@@ -7,6 +7,7 @@
 #include "gamestates/state_manager.h"
 #include "gamestates/sandbox_state.h"
 #include "asset/asset_manager.h"
+#include "manager/display_manager.h"
 
 using namespace dte;
 
@@ -56,8 +57,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    DisplayManager displayManager(renderer);
     AssetManager assetManager;
-    StateManager stateManager(&assetManager);
+    StateManager stateManager(&assetManager, &displayManager);
 
     SandboxState sandboxState;
     stateManager.push(&sandboxState);
@@ -81,6 +83,15 @@ int main(int argc, char *argv[]) {
             if (event.type == SDL_QUIT) {
                 quit = true;
             }
+            if (event.type == SDL_WINDOWEVENT) {
+                switch (event.window.event) {
+                    case SDL_WINDOWEVENT_RESIZED:
+                        const Sint32 w = event.window.data1;
+                        const Sint32 h = event.window.data2;
+                        displayManager.setCachedDimensions(w, h);
+                        break;
+                }
+            }
             stateManager.input(event);
         }
 
@@ -97,7 +108,7 @@ int main(int argc, char *argv[]) {
         // render
         SDL_RenderClear(renderer);
         float remainderFrames = float(accumulatorMs) / float(FIXED_MS_UPDATE);
-        stateManager.draw(renderer, totalTimeMs, remainderFrames);
+        stateManager.draw(totalTimeMs, remainderFrames);
         SDL_RenderPresent(renderer);
     }
 

@@ -4,6 +4,7 @@
 #include "../component/input.h"
 #include "../component/transform.h"
 #include "../component/draw.h"
+#include "../manager/display_manager.h"
 
 namespace dte {
     class InputComponent;
@@ -17,8 +18,8 @@ namespace dte {
             ~Entity();
             void input(SDL_Event event);
             void update();
-            void draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
-                float remainderFrames);
+            void draw(DisplayManager *dm,
+                      Uint32 totalTimeMs, float remainderFrames);
         private:
             InputComponent *inputComponent;
             TransformComponent *transformComponent;

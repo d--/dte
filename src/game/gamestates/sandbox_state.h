@@ -20,8 +20,8 @@ namespace dte {
         void enter() override;
         void input(SDL_Event event) override;
         void update() override;
-        void draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
-                  float remainderFrames) override;
+        void draw(DisplayManager *dm,
+                  Uint32 totalTimeMs, float remainderFrames) override;
         bool isQuit() override;
         void exit() override;
     private:

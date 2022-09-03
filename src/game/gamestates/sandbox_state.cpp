@@ -42,10 +42,10 @@ namespace dte {
         }
     }
 
-    void SandboxState::draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
-                            float remainderFrames) {
+    void SandboxState::draw(DisplayManager *dm,
+                            Uint32 totalTimeMs, float remainderFrames) {
         for (Entity *entity : entities) {
-            entity->draw(renderer, totalTimeMs, remainderFrames);
+            entity->draw(dm, totalTimeMs, remainderFrames);
         }
     }
 

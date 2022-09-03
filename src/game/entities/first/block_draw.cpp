@@ -12,8 +12,9 @@ namespace dte {
             128, 128
         }) {}
 
-    void BlockDrawComponent::update(Entity &entity, SDL_Renderer *renderer,
-            Uint32 totalTimeMs, float remainderFrames) {
+    void BlockDrawComponent::update(Entity &entity,
+                                    DisplayManager *dm,
+                                    Uint32 totalTimeMs, float remainderFrames) {
         float time = float(totalTimeMs) + (FIXED_MS_UPDATE * remainderFrames);
 
         float slowFactor = 1000.f; // ms per cycle
@@ -29,10 +30,10 @@ namespace dte {
 
         rect.w = int(128.f + scaleWDelta);
         rect.h = int(128.f + scaleHDelta);
-        rect.x = int(x + (xDelta * remainderFrames) - (scaleWDelta / 2.f));
-        rect.y = int(y + (yDelta * remainderFrames) - (scaleHDelta / 2.f));
+        rect.x = int(x + (xDelta * (remainderFrames - 1)) - (scaleWDelta / 2.f));
+        rect.y = int(y + (yDelta * (remainderFrames - 1)) - (scaleHDelta / 2.f));
 
-        SDL_RenderCopyEx(renderer, texture, nullptr, &rect, rotDelta,
+        SDL_RenderCopyEx(dm->getRenderer(), texture, nullptr, &rect, rotDelta,
             nullptr, SDL_FLIP_NONE);
     }
 }

@@ -22,8 +22,8 @@ namespace dte {
         transformComponent->update(*this);
     }
 
-    void Entity::draw(SDL_Renderer *renderer, Uint32 totalTimeMs,
-            float remainderFrames) {
-        drawComponent->update(*this, renderer, totalTimeMs, remainderFrames);
+    void Entity::draw(DisplayManager *dm,
+                      Uint32 totalTimeMs, float remainderFrames) {
+        drawComponent->update(*this, dm, totalTimeMs, remainderFrames);
     }
 }

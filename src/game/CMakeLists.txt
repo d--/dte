@@ -15,7 +15,8 @@ add_library(game
         job/asset_job_batch.cpp
         job/image_load_job.cpp
         job/text_load_job.cpp
-        job/texture_job.cpp)
+        job/texture_job.cpp
+        manager/display_manager.cpp)
 
 target_include_directories(game PUBLIC
         "${SDL2_IMAGE_INCLUDE_DIR}"
