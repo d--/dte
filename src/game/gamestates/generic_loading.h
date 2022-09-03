@@ -17,7 +17,7 @@ namespace dte {
                   std::vector<Entity *> *entities);
         bool isDone() const;
     private:
-        AssetJobBatch loadingJobBatch;
+        AssetJobBatch loadingMachineAssetJobBatch;
         LoadingState loadingState = LOAD_BEGIN;
     };
 }

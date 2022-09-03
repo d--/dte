@@ -8,10 +8,10 @@ namespace dte {
         public:
             explicit BlockTransformComponent(BlockInputComponent *bic);
             void update(Entity &entity) override;
-            float getX() const;
-            float getY() const;
-            float getXDelta() const;
-            float getYDelta() const;
+            [[nodiscard]] float getX() const;
+            [[nodiscard]] float getY() const;
+            [[nodiscard]] float getXDelta() const;
+            [[nodiscard]] float getYDelta() const;
         private:
             BlockInputComponent *blockInputComponent;
             float x = 0;

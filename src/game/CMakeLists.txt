@@ -21,7 +21,7 @@ target_include_directories(game PUBLIC
         "${SDL2_IMAGE_INCLUDE_DIR}"
         "${SDL2_TTF_INCLUDE_DIR}")
 
-add_executable(tetris tetris.cpp)
+add_executable(tetris game.cpp)
 
 target_include_directories(tetris PUBLIC
         "${PROJECT_BINARY_DIR}"

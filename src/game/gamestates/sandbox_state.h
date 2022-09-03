@@ -12,8 +12,7 @@ namespace dte {
         enum LoadingState {
             LOAD_BEGIN,
             LOAD_IN_PROGRESS,
-            LOAD_COMPLETE,
-            LOAD_END
+            LOAD_COMPLETE
         };
 
         void load(AssetManager *assetManager) override;

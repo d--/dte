@@ -15,18 +15,14 @@ namespace dte {
         if (loadingState == LOAD_IN_PROGRESS) {
             loadingMachine.load(assetManager, &assetJobBatch, &entities);
             if (loadingMachine.isDone()) {
+                auto blockTex = assetManager->getTexture("blockA");
+                auto blockInput = new BlockInputComponent();
+                auto blockTransform = new BlockTransformComponent(blockInput);
+                auto blockDraw = new BlockDrawComponent(blockTransform, blockTex);
+                auto block = new Entity(blockInput, blockTransform, blockDraw);
+                entities.push_back(block);
                 loadingState = LOAD_COMPLETE;
             }
-        }
-
-        if (loadingState == LOAD_COMPLETE) {
-            auto blockTex = assetManager->getTexture("blockA");
-            auto blockInput = new BlockInputComponent();
-            auto blockTransform = new BlockTransformComponent(blockInput);
-            auto blockDraw = new BlockDrawComponent(blockTransform, blockTex);
-            auto block = new Entity(blockInput, blockTransform, blockDraw);
-            entities.push_back(block);
-            loadingState = LOAD_END;
         }
     }
 
@@ -64,6 +60,6 @@ namespace dte {
     }
 
     bool SandboxState::isLoading() {
-        return loadingState != LOAD_END;
+        return loadingState != LOAD_COMPLETE;
     }
 }

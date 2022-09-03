@@ -8,15 +8,15 @@ namespace dte {
     void GenericLoadingMachine::load(AssetManager *assetManager,
             AssetJobBatch *batch, std::vector<Entity *> *entities) {
         if (loadingState == LOAD_BEGIN) {
-            loadingJobBatch.add(new TextLoadJob("loadingText",
-                                        "Philosopher-Regular.ttf",
-                                        "LOADING", 72, 0xFF, 0xFF, 0xFF, 0xFF));
-            assetManager->processBatch(&loadingJobBatch);
+            loadingMachineAssetJobBatch.add(new TextLoadJob("loadingText",
+                                                            "Philosopher-Regular.ttf",
+                                                            "LOADING", 72, 0xFF, 0xFF, 0xFF, 0xFF));
+            assetManager->processBatch(&loadingMachineAssetJobBatch);
             loadingState = LOAD_SHOW;
             return;
         }
 
-        if (loadingState == LOAD_SHOW && loadingJobBatch.isFinished()) {
+        if (loadingState == LOAD_SHOW && loadingMachineAssetJobBatch.isFinished()) {
             assetManager->processBatch(batch);
 
             auto loaderTex = assetManager->getTexture("loadingText");

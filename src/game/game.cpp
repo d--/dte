@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     windowFlags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN;
 
     SDL_Window *window;
-    window = SDL_CreateWindow("Tetris",
+    window = SDL_CreateWindow("Game",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         800, 600, windowFlags);
     if (window == nullptr) {
