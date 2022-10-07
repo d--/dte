@@ -37,6 +37,10 @@ namespace dte {
         states.back()->update();
     }
 
+    void StateManager::guiUpdate() {
+        states.back()->guiUpdate();
+    }
+
     void StateManager::draw(Uint32 totalTimeMs, float remainderFrames) {
         states.back()->draw(displayManager, totalTimeMs, remainderFrames);
     }

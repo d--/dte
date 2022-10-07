@@ -18,6 +18,7 @@ namespace dte {
         void push(GameState *state);
         void input(SDL_Event event);
         void update();
+        void guiUpdate();
         void draw(Uint32 totalTimeMs, float remainderFrames);
     private:
         AssetManager *assetManager;

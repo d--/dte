@@ -12,6 +12,7 @@ namespace dte {
         virtual void enter() = 0;
         virtual void input(SDL_Event event) = 0;
         virtual void update() = 0;
+        virtual void guiUpdate() = 0;
         virtual void draw(DisplayManager *dm,
                           Uint32 totalTimeMs,
                           float remainderFrames) = 0;

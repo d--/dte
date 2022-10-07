@@ -8,6 +8,9 @@
 #include "gamestates/sandbox_state.h"
 #include "asset/asset_manager.h"
 #include "manager/display_manager.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_sdl.h"
+#include "imgui/imgui_impl_sdlrenderer.h"
 
 using namespace dte;
 
@@ -57,6 +60,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+    ImGui_ImplSDLRenderer_Init(renderer);
+
     DisplayManager displayManager(renderer);
     AssetManager assetManager;
     StateManager stateManager(&assetManager, &displayManager);
@@ -80,6 +89,7 @@ int main(int argc, char *argv[]) {
 
         // input
         while (SDL_PollEvent(&event)) {
+            ImGui_ImplSDL2_ProcessEvent(&event);
             if (event.type == SDL_QUIT) {
                 quit = true;
             }
@@ -105,10 +115,18 @@ int main(int argc, char *argv[]) {
         // load new textures
         assetManager.pumpTextures(renderer);
 
+        // update ImGui
+        ImGui_ImplSDLRenderer_NewFrame();
+        ImGui_ImplSDL2_NewFrame();
+        ImGui::NewFrame();
+        stateManager.guiUpdate();
+
         // render
+        ImGui::Render();
         SDL_RenderClear(renderer);
         float remainderFrames = float(accumulatorMs) / float(FIXED_MS_UPDATE);
         stateManager.draw(totalTimeMs, remainderFrames);
+        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
     }
 

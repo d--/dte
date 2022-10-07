@@ -12,7 +12,7 @@ namespace dte {
     class BlockInputComponent : public InputComponent {
         public:
             void update(Entity &entity, SDL_Event event) override;
-            unsigned int getBlockInputState() const;
+            [[nodiscard]] unsigned int getBlockInputState() const;
         private:
             unsigned int inputState = 0;
     };

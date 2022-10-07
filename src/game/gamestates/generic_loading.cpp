@@ -24,7 +24,10 @@ namespace dte {
             auto loaderTransform = new BlockTransformComponent(loaderInput);
             auto loaderDraw = new BlockDrawComponent(loaderTransform,
                     loaderTex);
-            auto loader = new Entity(loaderInput, loaderTransform, loaderDraw);
+            auto loader = new Entity(loaderInput,
+                                     loaderTransform,
+                                     loaderDraw,
+                                     nullptr);
             entities->push_back(loader);
             loadingState = LOAD_IN_PROGRESS;
             return;

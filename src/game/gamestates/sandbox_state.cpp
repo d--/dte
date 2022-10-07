@@ -3,6 +3,7 @@
 #include "../entities/first/block_input.h"
 #include "../entities/first/block_transform.h"
 #include "../entities/first/block_draw.h"
+#include "../entities/first/block_gui.h"
 #include "../job/image_load_job.h"
 
 namespace dte {
@@ -19,7 +20,11 @@ namespace dte {
                 auto blockInput = new BlockInputComponent();
                 auto blockTransform = new BlockTransformComponent(blockInput);
                 auto blockDraw = new BlockDrawComponent(blockTransform, blockTex);
-                auto block = new Entity(blockInput, blockTransform, blockDraw);
+                auto blockGui = new BlockGuiComponent(blockTransform);
+                auto block = new Entity(blockInput,
+                                        blockTransform,
+                                        blockDraw,
+                                        blockGui);
                 entities.push_back(block);
                 loadingState = LOAD_COMPLETE;
             }
@@ -39,6 +44,12 @@ namespace dte {
     void SandboxState::update() {
         for (Entity *entity : entities) {
             entity->update();
+        }
+    }
+
+    void SandboxState::guiUpdate() {
+        for (Entity *entity : entities) {
+            entity->guiUpdate();
         }
     }
 
