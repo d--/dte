@@ -20,7 +20,6 @@ namespace dte {
         void enter() override;
         void input(SDL_Event event) override;
         void update() override;
-        void guiUpdate() override;
         void draw(DisplayManager *dm,
                   Uint32 totalTimeMs, float remainderFrames) override;
         bool isQuit() override;

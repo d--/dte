@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../component/input.h"
+#include "block_state.h"
 
 namespace dte {
     const unsigned int BLOCK_INPUT_NONE  = 0x0;
@@ -11,9 +12,9 @@ namespace dte {
 
     class BlockInputComponent : public InputComponent {
         public:
+            explicit BlockInputComponent(BlockStateComponent *bsc);
             void update(Entity &entity, SDL_Event event) override;
-            [[nodiscard]] unsigned int getBlockInputState() const;
         private:
-            unsigned int inputState = 0;
+            BlockStateComponent *blockStateComponent;
     };
 }

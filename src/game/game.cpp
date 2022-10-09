@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     }
 
     SDL_Renderer *renderer;
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == nullptr) {
         SDL_Log("Could not create renderer: %s\n", SDL_GetError());
         SDL_Quit();
@@ -105,6 +105,10 @@ int main(int argc, char *argv[]) {
             stateManager.input(event);
         }
 
+        ImGui_ImplSDLRenderer_NewFrame();
+        ImGui_ImplSDL2_NewFrame();
+        ImGui::NewFrame();
+
         // update
         while (accumulatorMs >= FIXED_MS_UPDATE) {
             stateManager.update();
@@ -115,17 +119,11 @@ int main(int argc, char *argv[]) {
         // load new textures
         assetManager.pumpTextures(renderer);
 
-        // update ImGui
-        ImGui_ImplSDLRenderer_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
-        stateManager.guiUpdate();
-
         // render
-        ImGui::Render();
         SDL_RenderClear(renderer);
         float remainderFrames = float(accumulatorMs) / float(FIXED_MS_UPDATE);
         stateManager.draw(totalTimeMs, remainderFrames);
+        ImGui::Render();
         ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
     }

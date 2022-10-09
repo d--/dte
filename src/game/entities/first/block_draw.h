@@ -6,12 +6,12 @@
 namespace dte {
     class BlockDrawComponent : public DrawComponent {
         public:
-            BlockDrawComponent(BlockTransformComponent *btc, SDL_Texture *tex);
+            BlockDrawComponent(BlockStateComponent *bsc, SDL_Texture *tex);
             void update(Entity &entity,
                         DisplayManager *dm,
                         Uint32 totalTimeMs, float remainderFrames) override;
         private:
-            BlockTransformComponent *blockTransformComponent;
+            BlockStateComponent *blockStateComponent;
             SDL_Texture *texture;
             SDL_Rect rect;
     };

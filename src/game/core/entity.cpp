@@ -1,20 +1,20 @@
 #include "entity.h"
 
 namespace dte {
-    Entity::Entity(InputComponent *ic,
+    Entity::Entity(StateComponent *sc,
+            InputComponent *ic,
             TransformComponent *tc,
-            DrawComponent *dc,
-            GuiComponent *gc) :
+            DrawComponent *dc) :
+        stateComponent(sc),
         inputComponent(ic),
         transformComponent(tc),
-        drawComponent(dc),
-        guiComponent(gc) {}
+        drawComponent(dc) {}
 
     Entity::~Entity() {
         delete inputComponent;
         delete transformComponent;
         delete drawComponent;
-        delete guiComponent;
+        delete stateComponent;
     }
 
     void Entity::input(SDL_Event event) {
@@ -23,11 +23,6 @@ namespace dte {
 
     void Entity::update() {
         transformComponent->update(*this);
-    }
-
-    void Entity::guiUpdate() {
-        if (guiComponent != nullptr)
-            guiComponent->update(*this);
     }
 
     void Entity::draw(DisplayManager *dm,

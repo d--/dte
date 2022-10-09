@@ -1,15 +1,14 @@
 add_library(game
         asset/asset_manager.cpp
         asset/texture_store.cpp
+        component/state.h
         component/draw.h
         component/input.h
         component/transform.h
-        component/gui.h
         core/entity.cpp
         entities/first/block_input.cpp
         entities/first/block_transform.cpp
         entities/first/block_draw.cpp
-        entities/first/block_gui.cpp
         gamestates/generic_loading.cpp
         gamestates/sandbox_state.cpp
         gamestates/state_manager.cpp

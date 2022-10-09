@@ -4,50 +4,33 @@
 namespace dte {
     const float BLOCK_SPEED = 7.f;
 
-    BlockTransformComponent::BlockTransformComponent(
-            BlockInputComponent *bic) :
-        blockInputComponent(bic) {};
+    BlockTransformComponent::BlockTransformComponent(BlockStateComponent *bsc) :
+        blockStateComponent(bsc) {};
 
     void BlockTransformComponent::update(Entity &entity) {
-        unsigned int input = blockInputComponent->getBlockInputState();
-        dx = 0.f;
-        dy = 0.f;
+        unsigned int input = blockStateComponent->inputState;
+        blockStateComponent->dx = 0.f;
+        blockStateComponent->dy = 0.f;
         if ((input & BLOCK_INPUT_UP) != 0) {
-            dy -= BLOCK_SPEED;
+            blockStateComponent->dy -= BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_DOWN) != 0) {
-            dy += BLOCK_SPEED;
+            blockStateComponent->dy += BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_LEFT) != 0) {
-            dx -= BLOCK_SPEED;
+            blockStateComponent->dx -= BLOCK_SPEED;
         }
         if ((input & BLOCK_INPUT_RIGHT) != 0) {
-            dx += BLOCK_SPEED;
+            blockStateComponent->dx += BLOCK_SPEED;
         }
         if ((input == (BLOCK_INPUT_UP | BLOCK_INPUT_RIGHT)) ||
                 (input == (BLOCK_INPUT_UP | BLOCK_INPUT_LEFT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_RIGHT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_LEFT))) {
-            dy = dy / SQRT2;
-            dx = dx / SQRT2;
+            blockStateComponent->dy = blockStateComponent->dy / SQRT2;
+            blockStateComponent->dx = blockStateComponent->dx / SQRT2;
         }
-        x += dx;
-        y += dy;
-    }
-
-    float BlockTransformComponent::getX() const {
-        return x;
-    }
-
-    float BlockTransformComponent::getY() const {
-        return y;
-    }
-
-    float BlockTransformComponent::getXDelta() const {
-        return dx;
-    }
-
-    float BlockTransformComponent::getYDelta() const {
-        return dy;
+        blockStateComponent->x += blockStateComponent->dx;
+        blockStateComponent->y += blockStateComponent->dy;
     }
 }

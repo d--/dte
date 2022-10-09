@@ -15,7 +15,7 @@ namespace dte {
 
         void load(AssetManager *assetManager, AssetJobBatch *batch,
                   std::vector<Entity *> *entities);
-        bool isDone() const;
+        [[nodiscard]] bool isDone() const;
     private:
         AssetJobBatch loadingMachineAssetJobBatch;
         LoadingState loadingState = LOAD_BEGIN;

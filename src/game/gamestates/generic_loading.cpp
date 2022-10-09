@@ -20,14 +20,15 @@ namespace dte {
             assetManager->processBatch(batch);
 
             auto loaderTex = assetManager->getTexture("loadingText");
-            auto loaderInput = new BlockInputComponent();
-            auto loaderTransform = new BlockTransformComponent(loaderInput);
-            auto loaderDraw = new BlockDrawComponent(loaderTransform,
+            auto loaderState = new BlockStateComponent();
+            auto loaderInput = new BlockInputComponent(loaderState);
+            auto loaderTransform = new BlockTransformComponent(loaderState);
+            auto loaderDraw = new BlockDrawComponent(loaderState,
                     loaderTex);
-            auto loader = new Entity(loaderInput,
+            auto loader = new Entity(loaderState,
+                                     loaderInput,
                                      loaderTransform,
-                                     loaderDraw,
-                                     nullptr);
+                                     loaderDraw);
             entities->push_back(loader);
             loadingState = LOAD_IN_PROGRESS;
             return;

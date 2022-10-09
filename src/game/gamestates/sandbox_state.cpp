@@ -1,9 +1,9 @@
 #include <unordered_map>
 #include "sandbox_state.h"
+#include "../entities/first/block_state.h"
 #include "../entities/first/block_input.h"
 #include "../entities/first/block_transform.h"
 #include "../entities/first/block_draw.h"
-#include "../entities/first/block_gui.h"
 #include "../job/image_load_job.h"
 
 namespace dte {
@@ -17,14 +17,14 @@ namespace dte {
             loadingMachine.load(assetManager, &assetJobBatch, &entities);
             if (loadingMachine.isDone()) {
                 auto blockTex = assetManager->getTexture("blockA");
-                auto blockInput = new BlockInputComponent();
-                auto blockTransform = new BlockTransformComponent(blockInput);
-                auto blockDraw = new BlockDrawComponent(blockTransform, blockTex);
-                auto blockGui = new BlockGuiComponent(blockTransform);
-                auto block = new Entity(blockInput,
+                auto blockState = new BlockStateComponent();
+                auto blockInput = new BlockInputComponent(blockState);
+                auto blockTransform = new BlockTransformComponent(blockState);
+                auto blockDraw = new BlockDrawComponent(blockState, blockTex);
+                auto block = new Entity(blockState,
+                                        blockInput,
                                         blockTransform,
-                                        blockDraw,
-                                        blockGui);
+                                        blockDraw);
                 entities.push_back(block);
                 loadingState = LOAD_COMPLETE;
             }
@@ -44,12 +44,6 @@ namespace dte {
     void SandboxState::update() {
         for (Entity *entity : entities) {
             entity->update();
-        }
-    }
-
-    void SandboxState::guiUpdate() {
-        for (Entity *entity : entities) {
-            entity->guiUpdate();
         }
     }
 
