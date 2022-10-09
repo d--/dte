@@ -50,6 +50,8 @@ namespace dte {
             ImGui::Text("y = %d", rect.y);
             ImGui::Text("rot = %f", rotDelta);
             ImGui::Checkbox("Rotate", &(state->rotate));
+            ImGui::Checkbox("Rainbow", &(state->rainbow));
+            ImGui::ColorEdit3("Color", state->rgbMod, 0);
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
                         1000.0f / ImGui::GetIO().Framerate,
                         ImGui::GetIO().Framerate);
@@ -63,6 +65,18 @@ namespace dte {
         if (state->forceCentered) {
             rect.x = (dm->getCachedWindowWidth() - rect.w) / 2;
             rect.y = (dm->getCachedWindowHeight() - rect.h) / 2;
+        }
+
+        if (state->rainbow) {
+            Uint8 r = floor(fabs(sin((time * (PI * 2.f)) / slowFactor) * 200) + 55);
+            Uint8 g = floor(fabs(sin((time * (PI * 2.f)) / slowFactor * 0.3f) * 200) + 55);
+            Uint8 b = floor(fabs(sin((time * (PI * 2.f)) / slowFactor * 0.66f) * 200) + 55);
+            SDL_SetTextureColorMod(texture, r, g, b);
+        } else {
+            SDL_SetTextureColorMod(texture,
+                                   floor(state->rgbMod[0] * 255.f),
+                                   floor(state->rgbMod[1] * 255.f),
+                                   floor(state->rgbMod[2] * 255.f));
         }
 
         SDL_RenderCopyEx(dm->getRenderer(), texture, nullptr, &rect, rotDelta,

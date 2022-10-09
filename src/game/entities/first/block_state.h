@@ -16,5 +16,7 @@ namespace dte {
         float dy = 0;
         bool fast = false;
         bool forceCentered = false;
+        bool rainbow = false;
+        float rgbMod[3] = {1.f, 1.f, 1.f};
     };
 }
