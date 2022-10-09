@@ -6,7 +6,6 @@ namespace dte {
     class BlockStateComponent : public StateComponent {
     public:
         bool showUi = true;
-        bool fast = false;
         bool rotate = true;
 
         unsigned int inputState = 0;
@@ -15,5 +14,7 @@ namespace dte {
         float y = 0;
         float dx = 0;
         float dy = 0;
+        bool fast = false;
+        bool forceCentered = false;
     };
 }

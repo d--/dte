@@ -23,6 +23,7 @@ namespace dte {
             auto loaderState = new BlockStateComponent();
             loaderState->showUi = false;
             loaderState->rotate = false;
+            loaderState->forceCentered = true;
             auto loaderInput = new BlockInputComponent(loaderState);
             auto loaderTransform = new BlockTransformComponent(loaderState);
             auto loaderDraw = new BlockDrawComponent(loaderState,

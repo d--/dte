@@ -40,6 +40,7 @@ namespace dte {
             ImGui::Text("y = %f", state->y);
             ImGui::Text("dx = %f", state->dx);
             ImGui::Text("dy = %f", state->dy);
+            ImGui::Checkbox("Go Fast", &(state->fast));
             ImGui::End();
 
             ImGui::Begin("Block Draw Rect Properties");
@@ -49,7 +50,6 @@ namespace dte {
             ImGui::Text("y = %d", rect.y);
             ImGui::Text("rot = %f", rotDelta);
             ImGui::Checkbox("Rotate", &(state->rotate));
-            ImGui::Checkbox("Go Fast", &(state->fast));
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
                         1000.0f / ImGui::GetIO().Framerate,
                         ImGui::GetIO().Framerate);
@@ -58,6 +58,11 @@ namespace dte {
 
         if (!(state->rotate)) {
             rotDelta = 0;
+        }
+
+        if (state->forceCentered) {
+            rect.x = (dm->getCachedWindowWidth() - rect.w) / 2;
+            rect.y = (dm->getCachedWindowHeight() - rect.h) / 2;
         }
 
         SDL_RenderCopyEx(dm->getRenderer(), texture, nullptr, &rect, rotDelta,

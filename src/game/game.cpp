@@ -66,7 +66,10 @@ int main(int argc, char *argv[]) {
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer_Init(renderer);
 
+    int width, height;
+    SDL_GetWindowSize(window, &width, &height);
     DisplayManager displayManager(renderer);
+    displayManager.setCachedDimensions(width, height);
     AssetManager assetManager;
     StateManager stateManager(&assetManager, &displayManager);
 
