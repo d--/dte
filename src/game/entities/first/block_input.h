@@ -15,6 +15,6 @@ namespace dte {
             explicit BlockInputComponent(BlockStateComponent *bsc);
             void update(Entity &entity, SDL_Event event) override;
         private:
-            BlockStateComponent *blockStateComponent;
+            BlockStateComponent *state;
     };
 }

@@ -11,7 +11,7 @@ namespace dte {
                         DisplayManager *dm,
                         Uint32 totalTimeMs, float remainderFrames) override;
         private:
-            BlockStateComponent *blockStateComponent;
+            BlockStateComponent *state;
             SDL_Texture *texture;
             SDL_Rect rect;
     };

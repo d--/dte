@@ -21,6 +21,8 @@ namespace dte {
 
             auto loaderTex = assetManager->getTexture("loadingText");
             auto loaderState = new BlockStateComponent();
+            loaderState->showUi = false;
+            loaderState->rotate = false;
             auto loaderInput = new BlockInputComponent(loaderState);
             auto loaderTransform = new BlockTransformComponent(loaderState);
             auto loaderDraw = new BlockDrawComponent(loaderState,

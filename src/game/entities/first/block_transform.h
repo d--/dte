@@ -9,6 +9,6 @@ namespace dte {
             explicit BlockTransformComponent(BlockStateComponent *bsc);
             void update(Entity &entity) override;
         private:
-            BlockStateComponent *blockStateComponent;
+            BlockStateComponent *state;
     };
 }

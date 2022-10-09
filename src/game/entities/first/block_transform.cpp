@@ -5,32 +5,34 @@ namespace dte {
     const float BLOCK_SPEED = 7.f;
 
     BlockTransformComponent::BlockTransformComponent(BlockStateComponent *bsc) :
-        blockStateComponent(bsc) {};
+        state(bsc) {};
 
     void BlockTransformComponent::update(Entity &entity) {
-        unsigned int input = blockStateComponent->inputState;
-        blockStateComponent->dx = 0.f;
-        blockStateComponent->dy = 0.f;
+        unsigned int input = state->inputState;
+        float speed = state->fast ? BLOCK_SPEED * 2.f : BLOCK_SPEED;
+
+        state->dx = 0.f;
+        state->dy = 0.f;
         if ((input & BLOCK_INPUT_UP) != 0) {
-            blockStateComponent->dy -= BLOCK_SPEED;
+            state->dy -= speed;
         }
         if ((input & BLOCK_INPUT_DOWN) != 0) {
-            blockStateComponent->dy += BLOCK_SPEED;
+            state->dy += speed;
         }
         if ((input & BLOCK_INPUT_LEFT) != 0) {
-            blockStateComponent->dx -= BLOCK_SPEED;
+            state->dx -= speed;
         }
         if ((input & BLOCK_INPUT_RIGHT) != 0) {
-            blockStateComponent->dx += BLOCK_SPEED;
+            state->dx += speed;
         }
         if ((input == (BLOCK_INPUT_UP | BLOCK_INPUT_RIGHT)) ||
                 (input == (BLOCK_INPUT_UP | BLOCK_INPUT_LEFT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_RIGHT)) ||
                 (input == (BLOCK_INPUT_DOWN | BLOCK_INPUT_LEFT))) {
-            blockStateComponent->dy = blockStateComponent->dy / SQRT2;
-            blockStateComponent->dx = blockStateComponent->dx / SQRT2;
+            state->dy = state->dy / SQRT2;
+            state->dx = state->dx / SQRT2;
         }
-        blockStateComponent->x += blockStateComponent->dx;
-        blockStateComponent->y += blockStateComponent->dy;
+        state->x += state->dx;
+        state->y += state->dy;
     }
 }
