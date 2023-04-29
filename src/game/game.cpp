@@ -2,6 +2,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cstdlib>
+#include <unicode/brkiter.h>
 #include "core/constants.h"
 #include "core/entity.h"
 #include "gamestates/state_manager.h"
@@ -13,6 +14,18 @@
 #include "imgui/imgui_impl_sdlrenderer.h"
 
 using namespace dte;
+
+void listLineBoundaries(const icu::UnicodeString& s) {
+    UErrorCode status = U_ZERO_ERROR;
+    icu::BreakIterator* bi = icu::BreakIterator::createLineInstance(icu::Locale::getUS(), status);
+    bi->setText(s);
+    int32_t p = bi->first();
+    while (p != icu::BreakIterator::DONE) {
+        printf("Boundary at position %d\n", p);
+        p = bi->next();
+    }
+    delete bi;
+}
 
 int main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -30,6 +43,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     atexit(IMG_Quit);
+
+    listLineBoundaries(icu::UnicodeString("This is a test of the emergency line printing system.  This is only a test."));
 
     loaded = TTF_Init();
     if (loaded == -1) {

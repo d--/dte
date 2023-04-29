@@ -25,7 +25,12 @@ target_include_directories(game PUBLIC
 
 add_executable(tetris game.cpp)
 
+find_library(ICU4C_I18N_LIBRARY NAMES icui18n)
+find_library(ICU4C_UC_LIBRARY NAMES icuuc)
+find_library(ICU4C_DATA_LIBRARY NAMES icudata)
+
 target_include_directories(tetris PUBLIC
+        "${USR_LOCAL_INCLUDE}"
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}/src"
         "${SDL2_IMAGE_INCLUDE_DIR}"
@@ -34,6 +39,9 @@ target_include_directories(tetris PUBLIC
 target_link_libraries(tetris PUBLIC
         game
         imgui
+        "${ICU4C_I18N_LIBRARY}"
+        "${ICU4C_UC_LIBRARY}"
+        "${ICU4C_DATA_LIBRARY}"
         "${SDL2_LIBRARY}"
         "${SDL2_IMAGE_LIBRARY}"
         "${SDL2_TTF_LIBRARY}")

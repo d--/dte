@@ -15,6 +15,7 @@ endif ()
 if (APPLE)
     set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules/apple")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -F$ENV{HOME}/Library/Frameworks")
+    set(USR_LOCAL_INCLUDE "/usr/local/include")
 endif ()
 
 set(DTE_ASSET_PATH "${CMAKE_SOURCE_DIR}/assets")
